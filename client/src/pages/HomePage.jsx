@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { HiVideoCamera, HiSparkles, HiSearch, HiX, HiOutlineHeart, HiHeart } from 'react-icons/hi';
@@ -23,7 +23,7 @@ const SORTS = [
   { id: 'name', label: 'Design A–Z' },
 ];
 
-const PAGE_SIZE = 60;
+const PAGE_SIZE = 24;
 
 // Shared toolbar styling — one visual language for every control in the bar
 const TOOL_BASE = 'inline-flex items-center gap-1.5 h-10 px-4 rounded-full text-xs font-semibold border transition-all whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[#800020]/20';
@@ -42,6 +42,8 @@ const HomePage = () => {
   const [picks, setPicks] = useState(readPicks);
   const [showPicksOnly, setShowPicksOnly] = useState(false);
   const [visible, setVisible] = useState(PAGE_SIZE);
+  const sentinelRef = useRef(null);
+  const isLoadingMore = useRef(false);
 
   useEffect(() => {
     const category = searchParams.get('category');
@@ -81,6 +83,28 @@ const HomePage = () => {
 
   // Any filter change should take the shelf back to the top page
   useEffect(() => { setVisible(PAGE_SIZE); }, [activeCategory, showVideoOnly, language, query, sort, showPicksOnly]);
+
+  // Auto-load more cards as user scrolls (infinite scroll)
+  const loadMore = useCallback(() => {
+    setVisible((v) => Math.min(v + PAGE_SIZE, filteredTemplates.length));
+    isLoadingMore.current = false;
+  }, [filteredTemplates.length]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoadingMore.current) {
+          isLoadingMore.current = true;
+          loadMore();
+        }
+      },
+      { rootMargin: '400px' }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMore]);
 
   const shown = filteredTemplates.slice(0, visible);
   const hasFilters = activeCategory !== 'all' || showVideoOnly || language !== 'all' || query.trim() !== '' || showPicksOnly;
@@ -330,16 +354,24 @@ const HomePage = () => {
             ))}
           </div>
 
+          {/* Infinite scroll sentinel — triggers auto-load when scrolled into view */}
           {filteredTemplates.length > visible && (
+            <div ref={sentinelRef} className="mt-8 flex flex-col items-center gap-3">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 border-2 border-[#800020]/25 border-t-[#800020] rounded-full animate-spin" />
+                <span className="text-sm text-gray-500">Loading more designs...</span>
+              </div>
+              <span className="text-xs text-gray-400">
+                {visible} of {filteredTemplates.length} shown
+              </span>
+            </div>
+          )}
+
+          {/* All loaded confirmation */}
+          {filteredTemplates.length > 0 && visible >= filteredTemplates.length && (
             <div className="mt-8 text-center">
-              <button
-                onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#800020] text-white text-sm font-semibold shadow-lg hover:bg-[#6a0018] transition-all"
-              >
-                Show {Math.min(PAGE_SIZE, filteredTemplates.length - visible)} more designs
-              </button>
-              <p className="text-xs text-gray-400 mt-2">
-                {filteredTemplates.length - visible} still to browse in this selection
+              <p className="text-sm text-gray-400">
+                You&apos;ve seen all {filteredTemplates.length} designs in this selection
               </p>
             </div>
           )}

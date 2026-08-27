@@ -4,5 +4,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install",
+  "alias": "guestinvitation.vercel.app",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

@@ -1,10 +1,11 @@
+import { memo } from 'react';
 import { HiPlay, HiOutlineHeart, HiHeart } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 
 // Accent color dots - shows available theme colors
 const COLOR_DOTS = ['#800020', '#c4787a', '#2a7a7a'];
 
-const TemplateCard = ({ template, index = 0, favourite = false, onToggleFavourite }) => {
+const TemplateCard = memo(({ template, index = 0, favourite = false, onToggleFavourite }) => {
   const slug = template.slug || template._id;
   const targetUrl = `/customize/${slug}`;
 
@@ -12,7 +13,7 @@ const TemplateCard = ({ template, index = 0, favourite = false, onToggleFavourit
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: Math.min(index * 0.02, 0.35) }}
+      transition={{ duration: 0.25, delay: Math.min(index * 0.01, 0.15) }}
       className={`template-card block group relative rounded-2xl overflow-hidden ${
         favourite ? 'ring-2 ring-[#e0486b]' : ''
       }`}
@@ -27,6 +28,8 @@ const TemplateCard = ({ template, index = 0, favourite = false, onToggleFavourit
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               draggable="false"
               loading="lazy"
+              decoding="async"
+              fetchPriority={index < 6 ? 'high' : 'auto'}
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center">
@@ -107,7 +110,8 @@ const TemplateCard = ({ template, index = 0, favourite = false, onToggleFavourit
       )}
     </motion.div>
   );
-};
+});
+TemplateCard.displayName = 'TemplateCard';
 
 // Occasion label lookup lives with the catalogue, cards only pass the id through
 const CATEGORIES_LABEL = (id) => (id || '').replace(/-/g, ' ');
