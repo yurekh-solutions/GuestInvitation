@@ -15,3 +15,7 @@ dist
 .idea/
 Thumbs.db
 desktop.ini
+
+# Vercel CLI state and temporary deploy scripts
+.vercel/
+.vercel-tmp/

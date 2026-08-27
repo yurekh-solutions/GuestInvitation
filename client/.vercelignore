@@ -1,0 +1,8 @@
+# Keep the upload small — dependencies are installed on Vercel, and only the
+# build output is served.
+node_modules
+dist
+.vite
+*.log
+.vercel
+src/test
