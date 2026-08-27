@@ -1,0 +1,17 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+.DS_Store
+
+# Local QA screenshots dropped in the repo root by browser test runs
+/*.png
+/*.jpg
+
+# Editor / OS working state
+.kiro/
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

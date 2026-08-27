@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Dancing+Script:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Cormorant+SC:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Marcellus&family=Italiana&family=EB+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Pinyon+Script&family=Tangerine:wght@400;700&family=Rozha+One&family=Yatra+One&family=Kalam:wght@400;700&family=Tiro+Devanagari+Hindi:wght@400;500;600;700&family=Mukta:wght@300;400;500;600;700&family=Hind:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Baloo+2:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Premium Indian invitation design system.
+ * Maroon (#800020) primary, gold (#B8860B) accent, warm cream background.
+ * Inter for body, Playfair Display for display/headings.
+ */
+
+:root {
+  --radius: 1rem;
+
+  /* #fdf8f0 warm cream */
+  --background: #fdf8f0;
+  --foreground: #5a4a3a;
+  --card: #ffffff;
+  --card-foreground: #4a3a2a;
+  --popover: #ffffff;
+  --popover-foreground: #4a3a2a;
+
+  /* #800020 maroon */
+  --primary: #800020;
+  --primary-foreground: #fefcf7;
+  --primary-deep: #6a0018;
+
+  --secondary: #f5e8d4;
+  --secondary-foreground: #800020;
+  --muted: #f5e8d4;
+  --muted-foreground: #8a7a6a;
+  --accent: #f0dfc0;
+  --accent-foreground: #800020;
+
+  /* #B8860B gold */
+  --gold: #B8860B;
+  --gold-foreground: #fefcf7;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #fefcf7;
+  --border: #e8dcc4;
+  --input: #e8dcc4;
+  --ring: #800020;
+
+  --gradient-festive: linear-gradient(135deg, #800020, #B8860B);
+  --shadow-card: 0 18px 40px -20px rgba(128, 0, 32, 0.35);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--primary);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 rounded-full font-medium transition-all duration-300;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    box-shadow: 0 1px 2px rgba(128, 0, 32, 0.25);
+  }
+  .btn-primary:hover {
+    background-color: var(--primary-deep);
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-full font-medium transition-all duration-300;
+    background-color: var(--card);
+    color: var(--primary);
+    border: 2px solid var(--primary);
+  }
+  .btn-secondary:hover {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  .btn-gold {
+    @apply px-6 py-3 rounded-full font-medium transition-all duration-300;
+    background-color: var(--gold);
+    color: var(--gold-foreground);
+  }
+  .btn-gold:hover {
+    background-color: #9a7209;
+  }
+
+  .filter-chip {
+    @apply px-4 py-2 rounded-full text-sm cursor-pointer transition-all duration-200;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+  }
+  .filter-chip:hover {
+    border-color: rgba(128, 0, 32, 0.4);
+  }
+
+  .filter-chip-active {
+    @apply px-4 py-2 rounded-full text-sm cursor-pointer transition-all duration-200;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border: 1px solid var(--primary);
+  }
+
+  .template-card {
+    background-color: var(--card);
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: box-shadow 300ms;
+    display: block;
+  }
+  .template-card:hover {
+    box-shadow: var(--shadow-card);
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-lg transition-all duration-200;
+    border: 1px solid var(--border);
+    background-color: var(--card);
+  }
+  .input-field:focus {
+    outline: none;
+    border-color: rgba(128, 0, 32, 0.5);
+    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.2);
+  }
+  .input-field::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 500;
+    font-size: 1.875rem;
+    color: var(--primary);
+  }
+  @media (min-width: 768px) {
+    .section-title {
+      font-size: 2.25rem;
+    }
+  }
+
+  .festive-gradient-text {
+    background-image: var(--gradient-festive);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Falling petals animation for live preview (video feel) */
+@keyframes petal-fall {
+  0% {
+    transform: translateY(-10%) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(45vh) translateX(18px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(105vh) translateX(-12px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.petal {
+  position: absolute;
+  top: -8%;
+  border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+  pointer-events: none;
+  animation: petal-fall linear infinite;
+}
+
+/* Gentle shimmer for preview glow */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.85; }
+}
+.preview-glow {
+  animation: soft-pulse 3s ease-in-out infinite;
+}
