@@ -2182,22 +2182,23 @@ const CustomizePage = () => {
           ctx.restore();
 
           // Watermark — soft scrim along the bottom edge, then a centred white credit
+          // Scrim is kept thin (8%) so it never covers artwork borders or text.
           if (withWatermark) {
             ctx.save();
-            const scrimH = Math.round(H * 0.13);
+            const scrimH = Math.round(H * 0.08);
             const scrim = ctx.createLinearGradient(0, H - scrimH, 0, H);
             scrim.addColorStop(0, 'rgba(24,6,12,0)');
-            scrim.addColorStop(0.45, 'rgba(24,6,12,0.34)');
-            scrim.addColorStop(1, 'rgba(24,6,12,0.66)');
+            scrim.addColorStop(0.5, 'rgba(24,6,12,0.28)');
+            scrim.addColorStop(1, 'rgba(24,6,12,0.55)');
             ctx.fillStyle = scrim;
             ctx.fillRect(0, H - scrimH, W, scrimH);
 
             const mark = 'Made with GuestInvitation  ·  guestinvitation.com';
-            const markSize = Math.round(21 * (W / 720));
+            const markSize = Math.round(17 * (W / 720));
             ctx.font = `600 ${markSize}px 'Inter', sans-serif`;
             const heartW = markSize * 1.05;
             const textW = ctx.measureText(mark).width;
-            const baseY = H - Math.round(34 * (W / 720));
+            const baseY = H - Math.round(18 * (W / 720));
             let cursor = (W - (heartW + textW)) / 2;
 
             // little heart before the credit
@@ -2494,11 +2495,11 @@ const CustomizePage = () => {
                   <>
                     <div
                       className="absolute inset-x-0 bottom-0 pointer-events-none"
-                      style={{ height: '13%', background: 'linear-gradient(to top, rgba(24,6,12,0.62) 0%, rgba(24,6,12,0.32) 45%, rgba(24,6,12,0) 100%)' }}
+                      style={{ height: '8%', background: 'linear-gradient(to top, rgba(24,6,12,0.50) 0%, rgba(24,6,12,0.25) 50%, rgba(24,6,12,0) 100%)' }}
                     />
                     <div
                       className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-1.5 pointer-events-none"
-                      style={{ paddingBottom: `${Math.round(9 * previewScale)}px`, paddingInline: `${Math.round(14 * previewScale)}px` }}
+                      style={{ paddingBottom: `${Math.round(5 * previewScale)}px`, paddingInline: `${Math.round(14 * previewScale)}px` }}
                     >
                       <HiHeart
                         className="w-3 h-3 flex-shrink-0"

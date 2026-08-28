@@ -32,6 +32,16 @@ const PALETTES = {
   'sky-trust': { bg1: '#EBF6FF', bg2: '#C3E2F9', ink: '#1B4B6B', gold: '#D6A94A', accent: '#3F92C4', accent2: '#6FB6DF', dark: '#12344A', light: '#F7FCFF', name: 'Sky' },
   'cocoa-cream': { bg1: '#FBF3E9', bg2: '#E4CDB1', ink: '#4A3121', gold: '#A9762F', accent: '#8B5A2B', accent2: '#C79A5E', dark: '#2E1D12', light: '#FEFBF6', name: 'Cocoa' },
   'carnival-pop': { bg1: '#FFFDF2', bg2: '#FFE9F0', ink: '#6B2D5C', gold: '#F2B705', accent: '#E8447A', accent2: '#3ABFC9', dark: '#3B1733', light: '#FFFFFF', name: 'Carnival' },
+  'royal-purple': { bg1: '#F5F0FF', bg2: '#D4B8E8', ink: '#3D1A5C', gold: '#D4AF37', accent: '#7B2D8E', accent2: '#9B4DCA', dark: '#2A0E40', light: '#FAF5FF', name: 'Royal Purple' },
+  'indigo-dream': { bg1: '#EEF0FF', bg2: '#B8C4E8', ink: '#1A2A5C', gold: '#C9A84C', accent: '#3B5998', accent2: '#5B7EC2', dark: '#0E1A3D', light: '#F5F7FF', name: 'Indigo' },
+  'teal-lagoon': { bg1: '#F0FAF8', bg2: '#A8DDD4', ink: '#1A4A42', gold: '#C49A3C', accent: '#2A9D8F', accent2: '#40B4A6', dark: '#0E3029', light: '#F5FDFA', name: 'Teal Lagoon' },
+  'ruby-wine': { bg1: '#FFF5F5', bg2: '#E8B4B8', ink: '#5C1A2A', gold: '#D4AF37', accent: '#C0392B', accent2: '#E74C3C', dark: '#3D0E1A', light: '#FFF8F8', name: 'Ruby Wine' },
+  'sage-eucalyptus': { bg1: '#F5F8F2', bg2: '#C8D8BE', ink: '#2A4A22', gold: '#B8963E', accent: '#6B8E5A', accent2: '#8FAE7A', dark: '#1A3015', light: '#FAFDF8', name: 'Sage' },
+  'dusty-lavender': { bg1: '#F8F5FF', bg2: '#D4C4E8', ink: '#4A2A6C', gold: '#C9A84C', accent: '#9B7EC2', accent2: '#B49AD4', dark: '#2E1A42', light: '#FCF8FF', name: 'Lavender' },
+  'navy-silver': { bg1: '#F0F4F8', bg2: '#A8B8C8', ink: '#1A2A3C', gold: '#C0C0C0', accent: '#2C4A6C', accent2: '#4A6A8C', dark: '#0E1A28', light: '#F5F8FC', name: 'Navy Silver' },
+  'champagne-blush': { bg1: '#FFF8F0', bg2: '#F0D4C4', ink: '#5C3A2A', gold: '#D4AF37', accent: '#D4A08A', accent2: '#E8B4A0', dark: '#3D2418', light: '#FFFCF8', name: 'Champagne' },
+  'olive-bronze': { bg1: '#F5F5EE', bg2: '#C8C4A8', ink: '#3A3A1A', gold: '#B8860B', accent: '#8B8040', accent2: '#A09850', dark: '#242410', light: '#FAFAF5', name: 'Olive Bronze' },
+  'cerulean-pearl': { bg1: '#F0F8FF', bg2: '#A8D4F0', ink: '#1A3A5C', gold: '#E8D4A0', accent: '#4A90C4', accent2: '#6AAAD4', dark: '#0E243D', light: '#F5FAFF', name: 'Cerulean' },
 };
 
 const rnd = (seed) => {
@@ -348,14 +358,122 @@ const DESIGNS = {
       <g opacity="0.5">${petalRing(360, 140, 14, 90, 12, P.gold, P.accent)}</g>
       ${dotRow(70, 650, 60, 5, P.accent, 30)}`;
   } },
+
+  'crescent-moon': { label: 'Crescent Moon', body: (P) => `
+    <g opacity="0.95"><path d="M360 180 A120 120 0 1 1 360 420 A90 90 0 1 0 360 210 Z" fill="${P.gold}"/>
+    <circle cx="360" cy="300" r="16" fill="${P.accent}"/></g>
+    ${[0,1,2,3,4,5,6,7].map(i => {
+      const a = (i/8)*Math.PI*2 - Math.PI/2;
+      const x = 360 + Math.cos(a)*200, y = 300 + Math.sin(a)*200;
+      return star(x, y, 12 + (i%3)*4, P.gold);
+    }).join('')}
+    ${frame(P, 24)}
+    <g opacity="0.4" stroke="${P.accent}" stroke-width="1.2" fill="none">
+      ${[0,1,2,3,4,5].map(r => [0,1,2,3,4,5,6,7].map(c =>
+        `<circle cx="${140+c*64}" cy="${900+r*62}" r="24"/>`).join('')).join('')}
+    </g>
+    <rect x="0" y="1190" width="${W}" height="90" fill="${P.dark}" opacity="0.22"/>
+    ${dotRow(80, 640, 1240, 4, P.gold, 36)}`,
+  },
+
+  'geometric-star': { label: 'Geometric Star', body: (P) => {
+    const r = rnd(17);
+    let pattern = '';
+    for (let row = 0; row < 6; row++) {
+      for (let col = 0; col < 8; col++) {
+        const x = 60 + col * 86 + (row % 2) * 43;
+        const y = 880 + row * 66;
+        pattern += star(x, y, 18 + r() * 8, row % 2 ? P.gold : P.accent);
+      }
+    }
+    return `${frame(P)}<g opacity="0.75">${pattern}</g>
+      <g opacity="0.9">${[180, 360, 540].map(x => star(x, 160, 28, P.gold)).join('')}</g>
+      <rect x="0" y="1180" width="${W}" height="100" fill="${P.dark}" opacity="0.2"/>
+      ${dotRow(70, 650, 60, 5, P.accent, 30)}`;
+  } },
+
+  'lotus-temple': { label: 'Lotus Temple', body: (P) => `
+    <g opacity="0.9">${[0,1,2,3,4,5,6,7].map(i => {
+      const a = (i/8)*Math.PI - Math.PI/2;
+      const px = 360 + Math.cos(a)*160, py = 1100 + Math.sin(a)*80;
+      return `<ellipse cx="${px}" cy="${py}" rx="36" ry="56" fill="${i%2?P.accent:P.accent2}" opacity="0.85" transform="rotate(${(i/8)*360-90} ${px} ${py})"/>`;
+    }).join('')}</g>
+    <circle cx="360" cy="1100" r="40" fill="${P.gold}"/>
+    <circle cx="360" cy="1100" r="18" fill="${P.light}"/>
+    ${frame(P, 20)}
+    <g opacity="0.5">${petalRing(360, 140, 14, 90, 12, P.gold, P.accent)}</g>
+    ${dotRow(80, 640, 1240, 4, P.gold, 36)}`,
+  },
+
+  'dharma-wheel': { label: 'Dharma Wheel', body: (P) => {
+    const spokes = 24;
+    let wheel = '';
+    for (let i = 0; i < spokes; i++) {
+      const a = (i/spokes)*Math.PI*2;
+      wheel += `<line x1="360" y1="1100" x2="${360+Math.cos(a)*100}" y2="${1100+Math.sin(a)*100}" stroke="${P.gold}" stroke-width="2.5"/>`;
+    }
+    return `${frame(P)}<g opacity="0.9">
+      <circle cx="360" cy="1100" r="100" fill="none" stroke="${P.gold}" stroke-width="3"/>
+      <circle cx="360" cy="1100" r="16" fill="${P.accent}"/>
+      ${wheel}</g>
+    <g opacity="0.5">${[120, 600].map(x => petalRing(x, 140, 12, 60, 10, P.accent2, P.gold)).join('')}</g>
+    ${dotRow(80, 640, 60, 5, P.accent, 30)}${dotRow(80, 640, 1240, 5, P.accent, 30)}`;
+  } },
+
+  'pookkalam': { label: 'Pookkalam', body: (P) => {
+    const r = rnd(23);
+    let flowers = '';
+    for (let ring = 0; ring < 5; ring++) {
+      const count = 8 + ring * 4;
+      const radius = 30 + ring * 28;
+      for (let i = 0; i < count; i++) {
+        const a = (i/count)*Math.PI*2 + ring*0.3;
+        const x = 360 + Math.cos(a)*radius;
+        const y = 1100 + Math.sin(a)*radius*0.6;
+        const colors = [P.accent, P.accent2, P.gold, P.light];
+        flowers += `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${8+ring*2}" fill="${colors[(ring+i)%4]}" opacity="0.85"/>`;
+      }
+    }
+    return `${frame(P)}<g opacity="0.9">${flowers}</g>
+      <g opacity="0.6">${[120, 600].map(x => leaf(x, 160, 50, x<360?30:330, P.accent2)).join('')}</g>
+      ${dotRow(80, 640, 60, 5, P.gold, 30)}`;
+  } },
+
+  'kolam-rangoli': { label: 'Kolam Rangoli', body: (P) => {
+    const dots = [];
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 10; col++) {
+        const x = 80 + col * 64 + (row % 2) * 32;
+        const y = 860 + row * 52;
+        dots.push(`<circle cx="${x}" cy="${y}" r="3" fill="${P.gold}"/>`);
+      }
+    }
+    return `${frame(P, 20)}<g opacity="0.7">${dots.join('')}</g>
+      <g opacity="0.85">${[0,1,2,3,4].map(i => {
+        const x = 160 + i * 100;
+        return `<path d="M${x} 860 Q${x+30} 900 ${x} 940 Q${x-30} 980 ${x} 1020" stroke="${P.accent}" stroke-width="2.5" fill="none"/>`;
+      }).join('')}</g>
+      ${marigold(360, 140, 18, P)}${dotRow(80, 640, 1240, 4, P.gold, 36)}`;
+  } },
+
+  'gudi-flag': { label: 'Gudi Flag', body: (P) => `
+    <g opacity="0.9"><rect x="340" y="200" width="8" height="900" fill="${P.gold}" rx="4"/>
+      <rect x="348" y="220" width="120" height="80" rx="4" fill="${P.accent}" opacity="0.9"/>
+      <rect x="348" y="220" width="120" height="80" rx="4" fill="none" stroke="${P.gold}" stroke-width="2"/>
+      <circle cx="408" cy="260" r="16" fill="${P.gold}"/>
+      <path d="M340 200 L330 180 L350 180 Z" fill="${P.accent2}"/></g>
+    ${frame(P)}
+    <g opacity="0.5">${petalRing(360, 1130, 16, 100, 12, P.accent2, P.gold)}</g>
+    ${dotRow(80, 640, 60, 5, P.accent, 30)}${dotRow(80, 640, 1240, 5, P.accent, 30)}`,
+  }
 };
 
 // ─────────────────────────── occasion mapping ───────────────────────────
 // design keys, palettes and name pools per occasion so cards look intentional
 const OCCASIONS = {
-  wedding: { label: 'Weddings', designs: ['temple-arch', 'marble-pillar', 'mandala', 'silk-drape', 'paisley-corner', 'toran-garland', 'floral-wreath', 'kalash-auspicious', 'peacock-fan', 'hearts-romance', 'sunburst-horizon'], palettes: ['deep-maroon', 'marigold-royale', 'rani-pink', 'ivory-jade', 'rose-gold', 'emerald-ivory', 'peacock-teal', 'saffron-temple', 'terracotta-raj', 'cocoa-cream'],
+  wedding: { label: 'Weddings', designs: ['temple-arch', 'marble-pillar', 'mandala', 'silk-drape', 'paisley-corner', 'toran-garland', 'floral-wreath', 'kalash-auspicious', 'peacock-fan', 'hearts-romance', 'sunburst-horizon'], palettes: ['deep-maroon', 'marigold-royale', 'rani-pink', 'ivory-jade', 'rose-gold', 'emerald-ivory', 'peacock-teal', 'saffron-temple', 'terracotta-raj', 'cocoa-cream', 'royal-purple', 'navy-silver', 'champagne-blush', 'ruby-wine', 'dusty-lavender'],
     names: ['Royal Mandap', 'Sacred Vows', 'Eternal Bond', 'Granite Palace', 'Golden Ritual', 'Blessed Union', 'Silk Ceremony', 'Heritage Wedding', 'Divine Alliance', 'Grand Kanyadaan', 'Saptapadi', 'Muhurat Celebration'], color: 'royal-maroon' },
-  engagement: { label: 'Engagement', designs: ['hearts-romance', 'mandala', 'paisley-corner', 'toran-garland', 'floral-wreath', 'balloon-party', 'sunburst-horizon'], palettes: ['rani-pink', 'rose-gold', 'pastel-mint', 'peacock-teal', 'marigold-royale', 'carnival-pop'],
+  engagement: { label: 'Engagement', designs: ['hearts-romance', 'mandala', 'paisley-corner', 'toran-garland', 'floral-wreath', 'balloon-party', 'sunburst-horizon'], palettes: ['rani-pink', 'rose-gold', 'pastel-mint', 'peacock-teal', 'marigold-royale', 'carnival-pop', 'royal-purple', 'dusty-lavender', 'champagne-blush'],
     names: ['Ring Ceremony', 'Promise Night', 'Sagai Soiree', 'Forever Begins', 'Matched Hearts', 'Glowing Vows'], color: 'rani-pink' },
   haldi: { label: 'Haldi', designs: ['toran-garland', 'diya-lights', 'mandala', 'rangoli-border', 'lotus-pond', 'silk-drape', 'floral-wreath', 'sunburst-horizon'], palettes: ['marigold-royale', 'saffron-temple', 'sunrise-coral', 'ivory-jade', 'pastel-mint'],
     names: ['Haldi Harmony', 'Golden Hands', 'Turmeric Glow', 'Mehndi & Haldi', 'Sunlit Blessings'], color: 'marigold' },
@@ -363,21 +481,21 @@ const OCCASIONS = {
     names: ['Mehndi Melody', 'Henna Nights', 'Green Elegance', 'Intricate Love', 'Sohera Sanskriti'], color: 'emerald' },
   sangeet: { label: 'Sangeet', designs: ['diya-lights', 'star-night', 'mandala', 'peacock-fan', 'rangoli-border', 'balloon-party', 'silk-drape'], palettes: ['midnight-gold', 'plum-noir', 'rani-pink', 'peacock-teal', 'carnival-pop', 'deep-maroon'],
     names: ['Sangeet Sparkle', 'Dhun & Dhol', 'Raas Raat', 'Melting Beats', 'Tarana Night'], color: 'magenta' },
-  reception: { label: 'Reception', designs: ['marble-pillar', 'corporate-grid', 'paisley-corner', 'silk-drape', 'floral-wreath', 'hearts-romance', 'layered-waves'], palettes: ['ivory-jade', 'pastel-mint', 'royal-blue', 'rose-gold', 'midnight-gold', 'terracotta-raj'],
+  reception: { label: 'Reception', designs: ['marble-pillar', 'corporate-grid', 'paisley-corner', 'silk-drape', 'floral-wreath', 'hearts-romance', 'layered-waves'], palettes: ['ivory-jade', 'pastel-mint', 'royal-blue', 'rose-gold', 'midnight-gold', 'terracotta-raj', 'navy-silver', 'indigo-dream', 'olive-bronze'],
     names: ['Reception Royale', 'Evening Grace', 'Thank-You Soiree', 'Grand Gathering'], color: 'peacock-teal' },
-  ganpati: { label: 'Ganpati', designs: ['temple-arch', 'mandala', 'toran-garland', 'rangoli-border', 'diya-lights', 'kalash-auspicious', 'silk-drape', 'lotus-pond', 'paisley-corner'], palettes: ['marigold-royale', 'saffron-temple', 'deep-maroon', 'sunrise-coral', 'ivory-jade', 'terracotta-raj'],
+  ganpati: { label: 'Ganpati', designs: ['temple-arch', 'mandala', 'toran-garland', 'rangoli-border', 'diya-lights', 'kalash-auspicious', 'silk-drape', 'lotus-pond', 'paisley-corner', 'gudi-flag'], palettes: ['marigold-royale', 'saffron-temple', 'deep-maroon', 'sunrise-coral', 'ivory-jade', 'terracotta-raj', 'ruby-wine', 'olive-bronze'],
     names: ['Ganpati Bappa', 'Morya Mandap', 'Vinayaka Vibhava', 'Ganesh Utsav', 'Sthapana Splendour'], color: 'saffron' },
-  navratri: { label: 'Navratri', designs: ['diya-lights', 'mandala', 'rangoli-border', 'toran-garland', 'peacock-fan', 'star-night'], palettes: ['rani-pink', 'marigold-royale', 'deep-maroon', 'peacock-teal', 'saffron-temple', 'carnival-pop'],
+  navratri: { label: 'Navratri', designs: ['diya-lights', 'mandala', 'rangoli-border', 'toran-garland', 'peacock-fan', 'star-night', 'kolam-rangoli'], palettes: ['rani-pink', 'marigold-royale', 'deep-maroon', 'peacock-teal', 'saffron-temple', 'carnival-pop', 'ruby-wine', 'royal-purple'],
     names: ['Garba Nights', 'Nine Nights', 'Dandiya Dhamaka', 'Mata Ki Mahima', 'Navratri Utsav'], color: 'rani-pink' },
-  'durga-puja': { label: 'Durga Puja', designs: ['temple-arch', 'mandala', 'toran-garland', 'silk-drape', 'diya-lights', 'sunburst-horizon', 'rangoli-border'], palettes: ['deep-maroon', 'saffron-temple', 'marigold-royale', 'terracotta-raj', 'rani-pink'],
+  'durga-puja': { label: 'Durga Puja', designs: ['temple-arch', 'mandala', 'toran-garland', 'silk-drape', 'diya-lights', 'sunburst-horizon', 'rangoli-border', 'kolam-rangoli'], palettes: ['deep-maroon', 'saffron-temple', 'marigold-royale', 'terracotta-raj', 'rani-pink', 'ruby-wine', 'navy-silver'],
     names: ['Durga Pujo', 'Bengal Blessings', 'Shakti Swaroopa', 'Ashtiya Utsav', 'Devi Aagomon'], color: 'scarlet' },
-  diwali: { label: 'Diwali', designs: ['diya-lights', 'rangoli-border', 'mandala', 'star-night', 'paisley-corner', 'jali-band', 'toran-garland', 'lotus-pond'], palettes: ['midnight-gold', 'deep-maroon', 'marigold-royale', 'plum-noir', 'peacock-teal', 'saffron-temple'],
+  diwali: { label: 'Diwali', designs: ['diya-lights', 'rangoli-border', 'mandala', 'star-night', 'paisley-corner', 'jali-band', 'toran-garland', 'lotus-pond', 'gudi-flag', 'kolam-rangoli'], palettes: ['midnight-gold', 'deep-maroon', 'marigold-royale', 'plum-noir', 'peacock-teal', 'saffron-temple', 'ruby-wine', 'royal-purple', 'olive-bronze'],
     names: ['Deepavali Glow', 'Festival of Lights', 'Rangoli Radiance', 'Kanakdhara Night', 'Dhanteras Cheer'], color: 'gold-leaf' },
   holi: { label: 'Holi', designs: ['balloon-party', 'rangoli-border', 'toran-garland', 'layered-waves', 'sunburst-horizon', 'diya-lights'], palettes: ['carnival-pop', 'rani-pink', 'peacock-teal', 'sunrise-coral', 'emerald-ivory', 'marigold-royale'],
     names: ['Holi Hai', 'Rangeelo Utsav', 'Dulandi Dhamaka', 'Phag Fun'], color: 'magenta' },
   janmashtami: { label: 'Janmashtami', designs: ['peacock-fan', 'mandala', 'star-night', 'lotus-pond', 'floral-wreath', 'rangoli-border'], palettes: ['peacock-teal', 'emerald-ivory', 'midnight-gold', 'marigold-royale', 'ivory-jade'],
     names: ['Makhan Chor', 'Bal Gopal', 'Jhulan Utsav', 'Dahi Handi', 'Krishna Janmashtami'], color: 'peacock-teal' },
-  birthday: { label: 'Birthdays', designs: ['balloon-party', 'cake-celebration', 'rangoli-border', 'toran-garland', 'sunburst-horizon', 'layered-waves'], palettes: ['carnival-pop', 'rani-pink', 'pastel-mint', 'marigold-royale', 'peacock-teal', 'sunrise-coral', 'rose-gold'],
+  birthday: { label: 'Birthdays', designs: ['balloon-party', 'cake-celebration', 'rangoli-border', 'toran-garland', 'sunburst-horizon', 'layered-waves'], palettes: ['carnival-pop', 'rani-pink', 'pastel-mint', 'marigold-royale', 'peacock-teal', 'sunrise-coral', 'rose-gold', 'teal-lagoon', 'indigo-dream', 'cerulean-pearl'],
     names: ['Birthday Bash', 'Little Star', 'Milestone Party', 'Cake & Confetti', 'Turning Grand'], color: 'rani-pink' },
   'griha-pravesh': { label: 'Griha Pravesh', designs: ['kalash-auspicious', 'temple-arch', 'marble-pillar', 'toran-garland', 'rangoli-border', 'corporate-grid'], palettes: ['ivory-jade', 'marigold-royale', 'saffron-temple', 'terracotta-raj', 'cocoa-cream'],
     names: ['Griha Pravesh', 'New Home Blessings', 'Vastu Shanti', 'Aangan Ki Pehchan'], color: 'saffron' },
@@ -393,11 +511,11 @@ const OCCASIONS = {
     names: ['Bhai Dooj', 'Bhaubeej Blessings', 'Rakhi & Dooj'], color: 'marigold' },
   chhath: { label: 'Chhath', designs: ['sunburst-horizon', 'lotus-pond', 'layered-waves', 'temple-arch'], palettes: ['sunrise-coral', 'marigold-royale', 'deep-maroon', 'saffron-temple'],
     names: ['Chhath Puja', 'Surya Arghya', 'Nahay Khay'], color: 'saffron' },
-  pongal: { label: 'Pongal & Sankranti', designs: ['sunburst-horizon', 'rangoli-border', 'kalash-auspicious', 'paisley-corner'], palettes: ['marigold-royale', 'saffron-temple', 'emerald-ivory', 'terracotta-raj'],
+  pongal: { label: 'Pongal & Sankranti', designs: ['sunburst-horizon', 'rangoli-border', 'kalash-auspicious', 'paisley-corner', 'kolam-rangoli', 'pookkalam'], palettes: ['marigold-royale', 'saffron-temple', 'emerald-ivory', 'terracotta-raj', 'olive-bronze', 'ruby-wine'],
     names: ['Pongal Petu', 'Sankranti Splendour', 'Thai Pirappu', 'Bhogi Bonfire'], color: 'saffron' },
-  onam: { label: 'Onam', designs: ['floral-wreath', 'lotus-pond', 'layered-waves', 'peacock-fan', 'silk-drape'], palettes: ['emerald-ivory', 'peacock-teal', 'ivory-jade', 'sunrise-coral'],
+  onam: { label: 'Onam', designs: ['floral-wreath', 'lotus-pond', 'layered-waves', 'peacock-fan', 'silk-drape', 'pookkalam', 'kolam-rangoli'], palettes: ['emerald-ivory', 'peacock-teal', 'ivory-jade', 'sunrise-coral', 'sage-eucalyptus', 'teal-lagoon'],
     names: ['Onam Sadhya', 'Pookkalam Pride', 'Maveli Njaan', 'Haritham Onams'], color: 'emerald' },
-  'gudi-padwa': { label: 'New Year & Ugadi', designs: ['toran-garland', 'temple-arch', 'kalash-auspicious', 'rangoli-border', 'mandala', 'jali-band'], palettes: ['marigold-royale', 'saffron-temple', 'deep-maroon', 'ivory-jade'],
+  'gudi-padwa': { label: 'New Year & Ugadi', designs: ['toran-garland', 'temple-arch', 'kalash-auspicious', 'rangoli-border', 'mandala', 'jali-band', 'gudi-flag'], palettes: ['marigold-royale', 'saffron-temple', 'deep-maroon', 'ivory-jade', 'olive-bronze', 'ruby-wine'],
     names: ['Gudi Padwa', 'Ugadi Puja', 'Yadi Am Bhanu', 'Chaitra Navratri'], color: 'saffron' },
   'ram-navami': { label: 'Ram Navami', designs: ['temple-arch', 'marble-pillar', 'mandala', 'diya-lights'], palettes: ['saffron-temple', 'marigold-royale', 'deep-maroon', 'terracotta-raj'],
     names: ['Ram Navami', 'Sita Ram', 'Kalyotsav', 'Maryada Purushottam'], color: 'saffron' },
@@ -409,17 +527,17 @@ const OCCASIONS = {
     names: ['Retirement Gala', 'Silver Jubilee Farewell', 'Thank You Sir', 'Chapter Two'], color: 'royal-blue' },
   farewell: { label: 'Farewell', designs: ['star-night', 'layered-waves', 'corporate-grid', 'balloon-party'], palettes: ['midnight-gold', 'sky-trust', 'carnival-pop', 'royal-blue'],
     names: ['Farewell Fete', 'Alvida Night', 'Bon Voyage', 'Last Bench Days'], color: 'peacock-blue' },
-  christmas: { label: 'Christmas', designs: ['star-night', 'layered-waves', 'mandala', 'corporate-grid', 'rangoli-border'], palettes: ['forest-night', 'emerald-ivory', 'deep-maroon', 'sky-trust', 'ivory-jade'],
-    names: ['Merry Christmas', 'Noel Night', 'Silent Night Supper', 'Christmas Carols'], color: 'emerald' },
+  christmas: { label: 'Christmas', designs: ['star-night', 'layered-waves', 'mandala', 'corporate-grid', 'rangoli-border', 'floral-wreath', 'hearts-romance', 'silk-drape', 'sunburst-horizon', 'moorish-arch', 'temple-arch', 'paisley-corner'], palettes: ['forest-night', 'emerald-ivory', 'deep-maroon', 'sky-trust', 'ivory-jade', 'ruby-wine', 'navy-silver', 'midnight-gold', 'plum-noir', 'carnival-pop', 'royal-purple', 'dusty-lavender', 'champagne-blush'],
+    names: ['Merry Christmas', 'Noel Night', 'Silent Night Supper', 'Christmas Carols', 'Joy to the World', 'Star of Bethlehem', 'Holly Jolly Christmas', 'Santa\'s Workshop', 'Winter Wonderland', 'Xmas Gala'], color: 'emerald' },
   'new-year': { label: 'New Year', designs: ['star-night', 'diya-lights', 'corporate-grid', 'balloon-party', 'sunburst-horizon'], palettes: ['midnight-gold', 'plum-noir', 'royal-blue', 'carnival-pop'],
     names: ['New Year Eve', 'Naya Saal', 'Countdown Party', 'Toast to Tomorrow'], color: 'gold-leaf' },
-  'makar-sankranti': { label: 'Sankranti', designs: ['sunburst-horizon', 'rangoli-border', 'kalash-auspicious', 'toran-garland', 'layered-waves'], palettes: ['marigold-royale', 'saffron-temple', 'sunrise-coral', 'sky-trust', 'emerald-ivory'],
+  'makar-sankranti': { label: 'Sankranti', designs: ['sunburst-horizon', 'rangoli-border', 'kalash-auspicious', 'toran-garland', 'layered-waves', 'kolam-rangoli'], palettes: ['marigold-royale', 'saffron-temple', 'sunrise-coral', 'sky-trust', 'emerald-ivory', 'olive-bronze'],
     names: ['Makar Sankranti', 'Tilgul Tyohaar', 'Kite Utsav', 'Bhog Celebration'], color: 'marigold' },
   dhanteras: { label: 'Dhanteras', designs: ['diya-lights', 'mandala', 'jali-band', 'kalash-auspicious', 'star-night'], palettes: ['midnight-gold', 'marigold-royale', 'deep-maroon', 'cocoa-cream', 'saffron-temple'],
     names: ['Dhanteras Laabh', 'Diyas & Gold', 'Lakshmi Puja', 'Dhan Terah'], color: 'gold-leaf' },
   'raksha-bandhan': { label: 'Raksha Bandhan', designs: ['toran-garland', 'rangoli-border', 'paisley-corner', 'hearts-romance', 'floral-wreath'], palettes: ['rani-pink', 'marigold-royale', 'carnival-pop', 'peacock-teal', 'ivory-jade'],
     names: ['Raksha Bandhan', 'Bhaiya Bhabhi', 'Rakhi Rituals', 'Thread of Love'], color: 'rani-pink' },
-  anniversary: { label: 'Anniversary', designs: ['hearts-romance', 'floral-wreath', 'mandala', 'marble-pillar', 'star-night', 'silk-drape'], palettes: ['rose-gold', 'rani-pink', 'midnight-gold', 'ivory-jade', 'plum-noir', 'deep-maroon'],
+  anniversary: { label: 'Anniversary', designs: ['hearts-romance', 'floral-wreath', 'mandala', 'marble-pillar', 'star-night', 'silk-drape'], palettes: ['rose-gold', 'rani-pink', 'midnight-gold', 'ivory-jade', 'plum-noir', 'deep-maroon', 'champagne-blush', 'dusty-lavender', 'royal-purple'],
     names: ['Golden Anniversary', 'Silver Jubilee', 'Ten Years Of Us', 'Renewal Of Vows'], color: 'dusty-rose' },
   'baby-shower': { label: 'Baby Shower', designs: ['balloon-party', 'floral-wreath', 'lotus-pond', 'layered-waves', 'cake-celebration'], palettes: ['pastel-mint', 'rani-pink', 'sky-trust', 'rose-gold', 'carnival-pop'],
     names: ['Little Wonder', 'Gender Reveal', 'Baby Blessings', 'Welcome Baby'], color: 'rose-blush' },
@@ -427,13 +545,13 @@ const OCCASIONS = {
     names: ['Naamkaran Sanskar', 'Naming Ceremony', 'Sweet Name Day', 'Barakhana Baraat'], color: 'marigold' },
   satyanarayan: { label: 'Satyanarayan Puja', designs: ['temple-arch', 'kalash-auspicious', 'diya-lights', 'mandala', 'toran-garland'], palettes: ['saffron-temple', 'marigold-royale', 'ivory-jade', 'deep-maroon'],
     names: ['Satyanarayan Katha', 'Satyanarayan Vrat', 'Prasad Samaroh', 'Purnima Puja'], color: 'saffron' },
-  'eid-ul-fitr': { label: 'Eid ul-Fitr', designs: ['moorish-arch', 'jali-band', 'star-night', 'floral-wreath', 'rangoli-border'], palettes: ['emerald-ivory', 'midnight-gold', 'ivory-jade', 'plum-noir', 'peacock-teal'],
+  'eid-ul-fitr': { label: 'Eid ul-Fitr', designs: ['moorish-arch', 'jali-band', 'star-night', 'floral-wreath', 'rangoli-border', 'crescent-moon', 'geometric-star'], palettes: ['emerald-ivory', 'midnight-gold', 'ivory-jade', 'plum-noir', 'peacock-teal', 'teal-lagoon', 'navy-silver', 'sage-eucalyptus'],
     names: ['Eid Mubarak', 'Meethi Eid', 'Chand Raat', 'Sheer Khurma Night'], color: 'emerald' },
-  'eid-ul-adha': { label: 'Bakrid', designs: ['moorish-arch', 'jali-band', 'star-night', 'layered-waves', 'marble-pillar'], palettes: ['cocoa-cream', 'forest-night', 'midnight-gold', 'terracotta-raj'],
+  'eid-ul-adha': { label: 'Bakrid', designs: ['moorish-arch', 'jali-band', 'star-night', 'layered-waves', 'marble-pillar', 'crescent-moon', 'geometric-star'], palettes: ['cocoa-cream', 'forest-night', 'midnight-gold', 'terracotta-raj', 'olive-bronze', 'navy-silver'],
     names: ['Eid-ul-Adha', 'Bakrid Mubarak', 'Qurbani Utsav'], color: 'forest' },
-  muharram: { label: 'Muharram', designs: ['jali-band', 'moorish-arch', 'star-night', 'layered-waves'], palettes: ['forest-night', 'plum-noir', 'midnight-gold', 'cocoa-cream'],
+  muharram: { label: 'Muharram', designs: ['jali-band', 'moorish-arch', 'star-night', 'layered-waves', 'crescent-moon', 'geometric-star'], palettes: ['forest-night', 'plum-noir', 'midnight-gold', 'cocoa-cream', 'navy-silver', 'sage-eucalyptus'],
     names: ['Muharram Majlis', 'Ashura Yaad', '10 Muharram'], color: 'forest' },
-  'milad-un-nabi': { label: 'Milad-un-Nabi', designs: ['moorish-arch', 'star-night', 'jali-band', 'floral-wreath'], palettes: ['emerald-ivory', 'royal-blue', 'midnight-gold', 'ivory-jade'],
+  'milad-un-nabi': { label: 'Milad-un-Nabi', designs: ['moorish-arch', 'star-night', 'jali-band', 'floral-wreath', 'crescent-moon', 'geometric-star'], palettes: ['emerald-ivory', 'royal-blue', 'midnight-gold', 'ivory-jade', 'teal-lagoon', 'cerulean-pearl'],
     names: ['Milad-un-Nabi', 'Jashn-e-Huzoori', 'Bari Mubarak', 'Roohani Jashn'], color: 'emerald' },
   easter: { label: 'Easter', designs: ['floral-wreath', 'lotus-pond', 'sunburst-horizon', 'layered-waves'], palettes: ['pastel-mint', 'sky-trust', 'sunrise-coral', 'ivory-jade'],
     names: ['Easter Blessings', 'Egg Hunt Day', 'Resurrection Sunday'], color: 'mint' },
@@ -441,11 +559,11 @@ const OCCASIONS = {
     names: ['Good Friday Service', 'Passion Day', 'Stations Of Cross'], color: 'graphite' },
   gurpurab: { label: 'Gurpurab', designs: ['jali-band', 'star-night', 'floral-wreath', 'rangoli-border', 'mandala'], palettes: ['saffron-temple', 'midnight-gold', 'ivory-jade', 'royal-blue', 'emerald-ivory'],
     names: ['Guru Nanak Jayanti', 'Gurpurab Glow', 'Parkash Utsav', 'Nishan Sahar'], color: 'peacock-teal' },
-  'buddha-purnima': { label: 'Buddha Purnima', designs: ['lotus-pond', 'mandala', 'peacock-fan', 'sunburst-horizon', 'star-night'], palettes: ['ivory-jade', 'emerald-ivory', 'saffron-temple', 'sky-trust'],
+  'buddha-purnima': { label: 'Buddha Purnima', designs: ['lotus-pond', 'mandala', 'peacock-fan', 'sunburst-horizon', 'star-night', 'dharma-wheel', 'lotus-temple'], palettes: ['ivory-jade', 'emerald-ivory', 'saffron-temple', 'sky-trust', 'sage-eucalyptus'],
     names: ['Buddha Purnima', 'Bodhi Day', 'Dhamma Chakra', 'Vaishakh Full Moon'], color: 'emerald' },
-  'mahavir-jayanti': { label: 'Mahavir Jayanti', designs: ['mandala', 'lotus-pond', 'jali-band', 'kalash-auspicious', 'rangoli-border'], palettes: ['ivory-jade', 'pastel-mint', 'marigold-royale', 'cocoa-cream'],
+  'mahavir-jayanti': { label: 'Mahavir Jayanti', designs: ['mandala', 'lotus-pond', 'jali-band', 'kalash-auspicious', 'rangoli-border', 'lotus-temple', 'dharma-wheel'], palettes: ['ivory-jade', 'pastel-mint', 'marigold-royale', 'cocoa-cream', 'sage-eucalyptus', 'champagne-blush'],
     names: ['Mahavir Jayanti', 'Keval Gyan', '24th Tirthankar', 'Ahimsa Utsav'], color: 'peacock-teal' },
-  paryushan: { label: 'Paryushan', designs: ['mandala', 'rangoli-border', 'lotus-pond', 'jali-band', 'paisley-corner'], palettes: ['ivory-jade', 'pastel-mint', 'midnight-gold', 'cocoa-cream'],
+  paryushan: { label: 'Paryushan', designs: ['mandala', 'rangoli-border', 'lotus-pond', 'jali-band', 'paisley-corner', 'lotus-temple', 'dharma-wheel'], palettes: ['ivory-jade', 'pastel-mint', 'midnight-gold', 'cocoa-cream', 'sage-eucalyptus', 'dusty-lavender'],
     names: ['Paryushan Parva', 'Kshama Prarthna', 'Ayambil Ols', 'Micchami Dukkadam'], color: 'forest' },
 };
 
@@ -533,25 +651,34 @@ if (OUT_DIR.endsWith(path.join('templates', 'art'))) {
 // Curated output: for every occasion we build the full design x palette x layout
 // cross-product, shuffle it deterministically and take the first N, so the
 // cards a user browses are spread across motifs, colours and compositions.
-const PER_OCCASION = 12;
+const PER_OCCASION = 75;
 
 const rows = [];
 let count = 0;
 const writtenFiles = new Set();
 const usedSlugs = new Set();
 const LANGS = ['english', 'hindi', 'english', 'marathi', 'english', 'hindi'];
+const LAYOUT_KEYS = Object.keys(LAYOUTS);
 
 Object.entries(OCCASIONS).forEach(([cat, cfg], oi) => {
   const designs = cfg.designs.filter((d) => DESIGNS[d]);
   const palettes = cfg.palettes.filter((p) => PALETTES[p]);
+  // Build unique design+palette combos only — each pair appears at most once
+  // so every template looks visually distinct. Layout is assigned round-robin.
   const combos = [];
-  Object.keys(LAYOUTS).forEach((l) => designs.forEach((d) => palettes.forEach((p) => combos.push([d, p, l]))));
+  const seen = new Set();
+  designs.forEach((d) => palettes.forEach((p) => {
+    const key = `${d}::${p}`;
+    if (!seen.has(key)) { seen.add(key); combos.push([d, p]); }
+  }));
   const shuffle = rnd(oi * 977 + 13);
   for (let i = combos.length - 1; i > 0; i--) {
     const j = Math.floor(shuffle() * (i + 1));
     [combos[i], combos[j]] = [combos[j], combos[i]];
   }
-  combos.slice(0, PER_OCCASION).forEach(([designKey, palKey, layoutKey], i) => {
+  combos.slice(0, PER_OCCASION).forEach(([designKey, palKey], i) => {
+    // Assign layout round-robin so we get variety across compositions
+    const layoutKey = LAYOUT_KEYS[i % LAYOUT_KEYS.length];
     const file = `art-${designKey}-${palKey}-${layoutKey}.svg`;
     const slug = slugify(`g-${cat}-${designKey}-${palKey}-${layoutKey}`);
     if (usedSlugs.has(slug)) return;
