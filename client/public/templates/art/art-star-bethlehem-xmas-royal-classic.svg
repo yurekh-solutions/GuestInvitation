@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+<defs>
+  <linearGradient id="bgstarbethlehemxmasroyalclassic" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#F8F0FF"/><stop offset="1" stop-color="#D8C8E8"/>
+  </linearGradient>
+  
+</defs>
+<rect width="720" height="1280" fill="url(#bgstarbethlehemxmasroyalclassic)"/>
+    <g opacity="0.95">
+    <path d="M360 200 L380 340 L520 360 L400 440 L430 580 L360 500 L290 580 L320 440 L200 360 L340 340 Z" fill="#FFD700" opacity="0.9"/>
+    <path d="M360 240 L372 340 L472 356 L390 420 L412 530 L360 476 L308 530 L330 420 L248 356 L348 340 Z" fill="#4B0082" opacity="0.7"/>
+    <circle cx="360" cy="390" r="20" fill="#FAF5FF" opacity="0.8"/>
+    </g>
+    <circle cx="560" cy="390" r="3" fill="#FFD700" opacity="0.6"/><circle cx="530" cy="492" r="5" fill="#FFD700" opacity="0.6"/><circle cx="360" cy="558" r="7" fill="#FFD700" opacity="0.6"/><circle cx="219" cy="475" r="3" fill="#FFD700" opacity="0.6"/><circle cx="120" cy="390" r="5" fill="#FFD700" opacity="0.6"/><circle cx="162" cy="271" r="7" fill="#FFD700" opacity="0.6"/><circle cx="360" cy="270" r="3" fill="#FFD700" opacity="0.6"/><circle cx="530" cy="288" r="5" fill="#FFD700" opacity="0.6"/>
+    <rect x="22" y="22" width="676" height="1236" fill="none" stroke="#FFD700" stroke-width="2.5"/><rect x="30" y="30" width="660" height="1220" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.6"/>
+    <circle cx="80" cy="1240" r="4" fill="#4B0082"/><circle cx="116" cy="1240" r="4" fill="#4B0082"/><circle cx="152" cy="1240" r="4" fill="#4B0082"/><circle cx="188" cy="1240" r="4" fill="#4B0082"/><circle cx="224" cy="1240" r="4" fill="#4B0082"/><circle cx="260" cy="1240" r="4" fill="#4B0082"/><circle cx="296" cy="1240" r="4" fill="#4B0082"/><circle cx="332" cy="1240" r="4" fill="#4B0082"/><circle cx="368" cy="1240" r="4" fill="#4B0082"/><circle cx="404" cy="1240" r="4" fill="#4B0082"/><circle cx="440" cy="1240" r="4" fill="#4B0082"/><circle cx="476" cy="1240" r="4" fill="#4B0082"/><circle cx="512" cy="1240" r="4" fill="#4B0082"/><circle cx="548" cy="1240" r="4" fill="#4B0082"/><circle cx="584" cy="1240" r="4" fill="#4B0082"/><circle cx="620" cy="1240" r="4" fill="#4B0082"/>
+
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+<defs>
+  <linearGradient id="bgornamentgarlandxmasclassicglow" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0" stop-color="#FFF8F0"/><stop offset="1" stop-color="#F0D8D0"/>
+  </linearGradient>
+  <radialGradient id="glowornamentgarlandxmasclassicglow" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#FFF5F0" stop-opacity="0.92"/><stop offset="0.62" stop-color="#FFF5F0" stop-opacity="0.5"/><stop offset="1" stop-color="#FFF5F0" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<rect width="720" height="1280" fill="url(#bgornamentgarlandxmasclassicglow)"/>
+    <g opacity="0.9"><g transform="translate(90 920)">
+        <line x1="0" y1="-30" x2="0" y2="0" stroke="#D4AF37" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="0" cy="0" r="18" fill="#C0392B" opacity="0.9"/>
+        <circle cx="-5" cy="-5" r="5" fill="white" opacity="0.3"/>
+        <rect x="-4" y="-22" width="8" height="6" rx="2" fill="#D4AF37"/>
+      </g><g transform="translate(172 937.3553495647024)">
+        <line x1="0" y1="-30" x2="0" y2="0" stroke="#D4AF37" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="0" cy="0" r="18" fill="#2E7D32" opacity="0.9"/>
+        <circle cx="-5" cy="-5" r="5" fill="white" opacity="0.3"/>
+        <rect x="-4" y="-22" width="8" height="6" rx="2" fill="#D4AF37"/>
+      </g><g transform="translate(254 951.2732592987212)">
+        <line x1="0" y1="-30" x2="0" y2="0" stroke="#D4AF37" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="0" cy="0" r="18" fill="#D4AF37" opacity="0.9"/>
+        <circle cx="-5" cy="-5" r="5" fill="white" opacity="0.3"/>
+        <rect x="-4" y="-22" width="8" height="6" rx="2" fill="#D4AF37"/>
+      </g><g transform="translate(336 958.9971164872729)">
+        <line x1="0" y1="-30" x2="0" y2="0" stroke="#D4AF37" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="0" cy="0" r="18" fill="#C0392B" opacity="0.9"/>
+        <circle cx="-5" cy="-5" r="5" fill="white" opacity="0.3"/>
+        <rect x="-4" y="-22" width="8" height="6" rx="2" fill="#D4AF37"/>
+      </g><g transform="translate(418 958.9971164872729)">
+        <line x1="0" y1="-30" x2="0" y2="0" stroke="#D4AF37" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="0" cy="0" r="18" fill="#2E7D32" opacity="0.9"/>
+        <circle cx="-5" cy="-5" r="5" fill="white" opacity="0.3"/>
+        <rect x="-4" y="-22" width="8" height="6" rx="2" fill="#D4AF37"/>
+      </g><g transform="translate(500 951.2732592987212)">
+        <line x1="0" y1="-30" x2="0" y2="0" stroke="#D4AF37" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="0" cy="0" r="18" fill="#D4AF37" opacity="0.9"/>
+        <circle cx="-5" cy="-5" r="5" fill="white" opacity="0.3"/>
+        <rect x="-4" y="-22" width="8" height="6" rx="2" fill="#D4AF37"/>
+      </g><g transform="translate(582 937.3553495647024)">
+        <line x1="0" y1="-30" x2="0" y2="0" stroke="#D4AF37" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="0" cy="0" r="18" fill="#C0392B" opacity="0.9"/>
+        <circle cx="-5" cy="-5" r="5" fill="white" opacity="0.3"/>
+        <rect x="-4" y="-22" width="8" height="6" rx="2" fill="#D4AF37"/>
+      </g><g transform="translate(664 920)">
+        <line x1="0" y1="-30" x2="0" y2="0" stroke="#D4AF37" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="0" cy="0" r="18" fill="#2E7D32" opacity="0.9"/>
+        <circle cx="-5" cy="-5" r="5" fill="white" opacity="0.3"/>
+        <rect x="-4" y="-22" width="8" height="6" rx="2" fill="#D4AF37"/>
+      </g></g>
+    <path d="M90 890 Q200 940 360 920 Q520 900 630 920" fill="none" stroke="#D4AF37" stroke-width="2" opacity="0.6"/>
+    <rect x="22" y="22" width="676" height="1236" fill="none" stroke="#D4AF37" stroke-width="2.5"/><rect x="30" y="30" width="660" height="1220" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.6"/>
+    <g opacity="0.4"><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(0)"/><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(36)"/><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(72)"/><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(108)"/><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(144)"/><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(180)"/><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(216)"/><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(251.99999999999997)"/><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(288)"/><ellipse cx="0" cy="-70" rx="12" ry="70" fill="#D4AF37" stroke="#C0392B" stroke-width="1.2" opacity="0.9" transform="translate(360 140) rotate(324)"/></g>
+    <circle cx="80" cy="1240" r="4" fill="#D4AF37"/><circle cx="116" cy="1240" r="4" fill="#D4AF37"/><circle cx="152" cy="1240" r="4" fill="#D4AF37"/><circle cx="188" cy="1240" r="4" fill="#D4AF37"/><circle cx="224" cy="1240" r="4" fill="#D4AF37"/><circle cx="260" cy="1240" r="4" fill="#D4AF37"/><circle cx="296" cy="1240" r="4" fill="#D4AF37"/><circle cx="332" cy="1240" r="4" fill="#D4AF37"/><circle cx="368" cy="1240" r="4" fill="#D4AF37"/><circle cx="404" cy="1240" r="4" fill="#D4AF37"/><circle cx="440" cy="1240" r="4" fill="#D4AF37"/><circle cx="476" cy="1240" r="4" fill="#D4AF37"/><circle cx="512" cy="1240" r="4" fill="#D4AF37"/><circle cx="548" cy="1240" r="4" fill="#D4AF37"/><circle cx="584" cy="1240" r="4" fill="#D4AF37"/><circle cx="620" cy="1240" r="4" fill="#D4AF37"/>
+
+      <ellipse cx="360" cy="450" rx="356" ry="330" fill="url(#glowornamentgarlandxmasclassicglow)"/>
+      <ellipse cx="360" cy="450" rx="300" ry="272" fill="none" stroke="#D4AF37" stroke-width="1.2" opacity="0.35"/>
+      <path d="M0 1130 L720 1058 L720 1280 L0 1280 Z" fill="#D4AF37" opacity="0.14"/>
+      <circle cx="90" cy="1218" r="4" fill="#D4AF37"/><circle cx="132" cy="1218" r="4" fill="#D4AF37"/><circle cx="174" cy="1218" r="4" fill="#D4AF37"/><circle cx="216" cy="1218" r="4" fill="#D4AF37"/><circle cx="258" cy="1218" r="4" fill="#D4AF37"/><circle cx="300" cy="1218" r="4" fill="#D4AF37"/><circle cx="342" cy="1218" r="4" fill="#D4AF37"/><circle cx="384" cy="1218" r="4" fill="#D4AF37"/><circle cx="426" cy="1218" r="4" fill="#D4AF37"/><circle cx="468" cy="1218" r="4" fill="#D4AF37"/><circle cx="510" cy="1218" r="4" fill="#D4AF37"/><circle cx="552" cy="1218" r="4" fill="#D4AF37"/><circle cx="594" cy="1218" r="4" fill="#D4AF37"/>
+</svg>

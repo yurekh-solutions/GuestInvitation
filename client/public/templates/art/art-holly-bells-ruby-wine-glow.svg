@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+<defs>
+  <linearGradient id="bghollybellsrubywineglow" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0" stop-color="#FFF5F5"/><stop offset="1" stop-color="#E8B4B8"/>
+  </linearGradient>
+  <radialGradient id="glowhollybellsrubywineglow" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#FFF8F8" stop-opacity="0.92"/><stop offset="0.62" stop-color="#FFF8F8" stop-opacity="0.5"/><stop offset="1" stop-color="#FFF8F8" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<rect width="720" height="1280" fill="url(#bghollybellsrubywineglow)"/>
+    <g opacity="0.9"><g transform="translate(200 1050)">
+        <path d="M0 0 Q-20 -30 -10 -50 Q0 -30 10 -50 Q20 -30 0 0 Z" fill="#E74C3C" opacity="0.85"/>
+        <path d="M0 0 Q20 -20 30 -10 Q10 10 0 0 Z" fill="#E74C3C" opacity="0.7" transform="rotate(60)"/>
+        <circle cx="-5" cy="-20" r="5" fill="#C0392B"/><circle cx="5" cy="-25" r="4" fill="#C0392B"/>
+        <ellipse cx="0" cy="10" rx="8" ry="12" fill="#D4AF37" opacity="0.9"/>
+        <line x1="0" y1="-2" x2="0" y2="10" stroke="#3D0E1A" stroke-width="1" opacity="0.5"/>
+      </g><g transform="translate(310 1110)">
+        <path d="M0 0 Q-20 -30 -10 -50 Q0 -30 10 -50 Q20 -30 0 0 Z" fill="#E74C3C" opacity="0.85"/>
+        <path d="M0 0 Q20 -20 30 -10 Q10 10 0 0 Z" fill="#E74C3C" opacity="0.7" transform="rotate(60)"/>
+        <circle cx="-5" cy="-20" r="5" fill="#C0392B"/><circle cx="5" cy="-25" r="4" fill="#C0392B"/>
+        <ellipse cx="0" cy="10" rx="8" ry="12" fill="#D4AF37" opacity="0.9"/>
+        <line x1="0" y1="-2" x2="0" y2="10" stroke="#3D0E1A" stroke-width="1" opacity="0.5"/>
+      </g><g transform="translate(420 1050)">
+        <path d="M0 0 Q-20 -30 -10 -50 Q0 -30 10 -50 Q20 -30 0 0 Z" fill="#E74C3C" opacity="0.85"/>
+        <path d="M0 0 Q20 -20 30 -10 Q10 10 0 0 Z" fill="#E74C3C" opacity="0.7" transform="rotate(60)"/>
+        <circle cx="-5" cy="-20" r="5" fill="#C0392B"/><circle cx="5" cy="-25" r="4" fill="#C0392B"/>
+        <ellipse cx="0" cy="10" rx="8" ry="12" fill="#D4AF37" opacity="0.9"/>
+        <line x1="0" y1="-2" x2="0" y2="10" stroke="#3D0E1A" stroke-width="1" opacity="0.5"/>
+      </g><g transform="translate(530 1110)">
+        <path d="M0 0 Q-20 -30 -10 -50 Q0 -30 10 -50 Q20 -30 0 0 Z" fill="#E74C3C" opacity="0.85"/>
+        <path d="M0 0 Q20 -20 30 -10 Q10 10 0 0 Z" fill="#E74C3C" opacity="0.7" transform="rotate(60)"/>
+        <circle cx="-5" cy="-20" r="5" fill="#C0392B"/><circle cx="5" cy="-25" r="4" fill="#C0392B"/>
+        <ellipse cx="0" cy="10" rx="8" ry="12" fill="#D4AF37" opacity="0.9"/>
+        <line x1="0" y1="-2" x2="0" y2="10" stroke="#3D0E1A" stroke-width="1" opacity="0.5"/>
+      </g></g>
+    <rect x="22" y="22" width="676" height="1236" fill="none" stroke="#D4AF37" stroke-width="2.5"/><rect x="30" y="30" width="660" height="1220" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.6"/>
+    <g opacity="0.45"><circle cx="120" cy="140" r="6" fill="#D4AF37" opacity="0.7"/><circle cx="220" cy="140" r="6" fill="#D4AF37" opacity="0.7"/><circle cx="320" cy="140" r="6" fill="#D4AF37" opacity="0.7"/><circle cx="420" cy="140" r="6" fill="#D4AF37" opacity="0.7"/><circle cx="520" cy="140" r="6" fill="#D4AF37" opacity="0.7"/><circle cx="620" cy="140" r="6" fill="#D4AF37" opacity="0.7"/></g>
+    <circle cx="80" cy="60" r="5" fill="#C0392B"/><circle cx="110" cy="60" r="5" fill="#C0392B"/><circle cx="140" cy="60" r="5" fill="#C0392B"/><circle cx="170" cy="60" r="5" fill="#C0392B"/><circle cx="200" cy="60" r="5" fill="#C0392B"/><circle cx="230" cy="60" r="5" fill="#C0392B"/><circle cx="260" cy="60" r="5" fill="#C0392B"/><circle cx="290" cy="60" r="5" fill="#C0392B"/><circle cx="320" cy="60" r="5" fill="#C0392B"/><circle cx="350" cy="60" r="5" fill="#C0392B"/><circle cx="380" cy="60" r="5" fill="#C0392B"/><circle cx="410" cy="60" r="5" fill="#C0392B"/><circle cx="440" cy="60" r="5" fill="#C0392B"/><circle cx="470" cy="60" r="5" fill="#C0392B"/><circle cx="500" cy="60" r="5" fill="#C0392B"/><circle cx="530" cy="60" r="5" fill="#C0392B"/><circle cx="560" cy="60" r="5" fill="#C0392B"/><circle cx="590" cy="60" r="5" fill="#C0392B"/><circle cx="620" cy="60" r="5" fill="#C0392B"/>
+
+      <ellipse cx="360" cy="450" rx="356" ry="330" fill="url(#glowhollybellsrubywineglow)"/>
+      <ellipse cx="360" cy="450" rx="300" ry="272" fill="none" stroke="#D4AF37" stroke-width="1.2" opacity="0.35"/>
+      <path d="M0 1130 L720 1058 L720 1280 L0 1280 Z" fill="#D4AF37" opacity="0.14"/>
+      <circle cx="90" cy="1218" r="4" fill="#D4AF37"/><circle cx="132" cy="1218" r="4" fill="#D4AF37"/><circle cx="174" cy="1218" r="4" fill="#D4AF37"/><circle cx="216" cy="1218" r="4" fill="#D4AF37"/><circle cx="258" cy="1218" r="4" fill="#D4AF37"/><circle cx="300" cy="1218" r="4" fill="#D4AF37"/><circle cx="342" cy="1218" r="4" fill="#D4AF37"/><circle cx="384" cy="1218" r="4" fill="#D4AF37"/><circle cx="426" cy="1218" r="4" fill="#D4AF37"/><circle cx="468" cy="1218" r="4" fill="#D4AF37"/><circle cx="510" cy="1218" r="4" fill="#D4AF37"/><circle cx="552" cy="1218" r="4" fill="#D4AF37"/><circle cx="594" cy="1218" r="4" fill="#D4AF37"/>
+</svg>

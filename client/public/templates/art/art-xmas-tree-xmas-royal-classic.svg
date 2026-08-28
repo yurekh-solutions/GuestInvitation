@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+<defs>
+  <linearGradient id="bgxmastreexmasroyalclassic" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#F8F0FF"/><stop offset="1" stop-color="#D8C8E8"/>
+  </linearGradient>
+  
+</defs>
+<rect width="720" height="1280" fill="url(#bgxmastreexmasroyalclassic)"/>
+    <g opacity="0.95"><path d="M360 240 L260 440 L460 440 Z" fill="#6A0DAD" opacity="0.9"/><path d="M360 420 L280 620 L440 620 Z" fill="#6A0DAD" opacity="0.9"/><path d="M360 600 L300 800 L420 800 Z" fill="#6A0DAD" opacity="0.9"/><rect x="340" y="580" width="40" height="50" rx="4" fill="#FFD700" opacity="0.8"/>
+    <circle cx="360" cy="240" r="14" fill="#FFD700"/><path d="M360 210 L360 230" stroke="#FFD700" stroke-width="3"/></g>
+    <circle cx="200" cy="460" r="8" fill="#FFD700" opacity="0.85"/><circle cx="270" cy="580" r="8" fill="#4B0082" opacity="0.85"/><circle cx="340" cy="700" r="8" fill="#FFD700" opacity="0.85"/><circle cx="410" cy="460" r="8" fill="#4B0082" opacity="0.85"/><circle cx="480" cy="580" r="8" fill="#FFD700" opacity="0.85"/><circle cx="550" cy="700" r="8" fill="#4B0082" opacity="0.85"/>
+    <rect x="22" y="22" width="676" height="1236" fill="none" stroke="#FFD700" stroke-width="2.5"/><rect x="30" y="30" width="660" height="1220" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.6"/>
+    <g opacity="0.4"><circle cx="640" cy="1000" r="3" fill="#FFD700"/><circle cx="558" cy="1127" r="3" fill="#FFD700"/><circle cx="360" cy="1180" r="3" fill="#FFD700"/><circle cx="162" cy="1127" r="3" fill="#FFD700"/><circle cx="80" cy="1000" r="3" fill="#FFD700"/><circle cx="162" cy="873" r="3" fill="#FFD700"/><circle cx="360" cy="820" r="3" fill="#FFD700"/><circle cx="558" cy="873" r="3" fill="#FFD700"/></g>
+    <circle cx="80" cy="1240" r="4" fill="#FFD700"/><circle cx="116" cy="1240" r="4" fill="#FFD700"/><circle cx="152" cy="1240" r="4" fill="#FFD700"/><circle cx="188" cy="1240" r="4" fill="#FFD700"/><circle cx="224" cy="1240" r="4" fill="#FFD700"/><circle cx="260" cy="1240" r="4" fill="#FFD700"/><circle cx="296" cy="1240" r="4" fill="#FFD700"/><circle cx="332" cy="1240" r="4" fill="#FFD700"/><circle cx="368" cy="1240" r="4" fill="#FFD700"/><circle cx="404" cy="1240" r="4" fill="#FFD700"/><circle cx="440" cy="1240" r="4" fill="#FFD700"/><circle cx="476" cy="1240" r="4" fill="#FFD700"/><circle cx="512" cy="1240" r="4" fill="#FFD700"/><circle cx="548" cy="1240" r="4" fill="#FFD700"/><circle cx="584" cy="1240" r="4" fill="#FFD700"/><circle cx="620" cy="1240" r="4" fill="#FFD700"/>
+
+</svg>

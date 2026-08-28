@@ -42,6 +42,13 @@ const PALETTES = {
   'champagne-blush': { bg1: '#FFF8F0', bg2: '#F0D4C4', ink: '#5C3A2A', gold: '#D4AF37', accent: '#D4A08A', accent2: '#E8B4A0', dark: '#3D2418', light: '#FFFCF8', name: 'Champagne' },
   'olive-bronze': { bg1: '#F5F5EE', bg2: '#C8C4A8', ink: '#3A3A1A', gold: '#B8860B', accent: '#8B8040', accent2: '#A09850', dark: '#242410', light: '#FAFAF5', name: 'Olive Bronze' },
   'cerulean-pearl': { bg1: '#F0F8FF', bg2: '#A8D4F0', ink: '#1A3A5C', gold: '#E8D4A0', accent: '#4A90C4', accent2: '#6AAAD4', dark: '#0E243D', light: '#F5FAFF', name: 'Cerulean' },
+  // Christmas-specific palettes
+  'xmas-classic': { bg1: '#FFF8F0', bg2: '#F0D8D0', ink: '#1A4A22', gold: '#D4AF37', accent: '#C0392B', accent2: '#2E7D32', dark: '#0E3015', light: '#FFF5F0', name: 'Xmas Classic' },
+  'xmas-elegant': { bg1: '#FFFDF5', bg2: '#F5ECD8', ink: '#5C3A1A', gold: '#D4AF37', accent: '#8B0000', accent2: '#DAA520', dark: '#3D1A0A', light: '#FFFCF0', name: 'Xmas Elegant' },
+  'xmas-winter': { bg1: '#F0F5FF', bg2: '#C8D8E8', ink: '#1A2A4A', gold: '#C0C0C0', accent: '#4169E1', accent2: '#87CEEB', dark: '#0E1A30', light: '#F5F8FF', name: 'Xmas Winter' },
+  'xmas-burgundy': { bg1: '#FFF5F5', bg2: '#E8C0C0', ink: '#4A0A1A', gold: '#D4AF37', accent: '#800020', accent2: '#B22234', dark: '#2E0510', light: '#FFF8F8', name: 'Xmas Burgundy' },
+  'xmas-forest': { bg1: '#F0FFF0', bg2: '#C8E8C8', ink: '#0A3A1A', gold: '#FFD700', accent: '#228B22', accent2: '#32CD32', dark: '#052010', light: '#F5FFF5', name: 'Xmas Forest' },
+  'xmas-royal': { bg1: '#F8F0FF', bg2: '#D8C8E8', ink: '#2A1A4A', gold: '#FFD700', accent: '#4B0082', accent2: '#6A0DAD', dark: '#1A0E30', light: '#FAF5FF', name: 'Xmas Royal' },
 };
 
 const rnd = (seed) => {
@@ -465,10 +472,180 @@ const DESIGNS = {
     ${frame(P)}
     <g opacity="0.5">${petalRing(360, 1130, 16, 100, 12, P.accent2, P.gold)}</g>
     ${dotRow(80, 640, 60, 5, P.accent, 30)}${dotRow(80, 640, 1240, 5, P.accent, 30)}`,
-  }
+  },
+
+  // ─── Christmas designs ───
+  'xmas-tree': { label: 'Christmas Tree', body: (P) => {
+    const tiers = [0,1,2].map(t => {
+      const y = 400 + t * 180, w = 100 - t * 20;
+      return `<path d="M360 ${y - 160} L${360 - w} ${y + 40} L${360 + w} ${y + 40} Z" fill="${P.accent2}" opacity="0.9"/>`;
+    }).join('');
+    const ornaments = [0,1,2,3,4,5].map(i => {
+      const x = 200 + i * 70, y = 460 + (i % 3) * 120;
+      return `<circle cx="${x}" cy="${y}" r="8" fill="${i%2?P.accent:P.gold}" opacity="0.85"/>`;
+    }).join('');
+    const stars = [0,1,2,3,4,5,6,7].map(i => {
+      const a = (i/8)*Math.PI*2, x = 360+Math.cos(a)*280, y = 1000+Math.sin(a)*180;
+      return `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="3" fill="${P.gold}"/>`;
+    }).join('');
+    return `    <g opacity="0.95">${tiers}<rect x="340" y="580" width="40" height="50" rx="4" fill="${P.gold}" opacity="0.8"/>
+    <circle cx="360" cy="240" r="14" fill="${P.gold}"/><path d="M360 210 L360 230" stroke="${P.gold}" stroke-width="3"/></g>
+    ${ornaments}
+    ${frame(P)}
+    <g opacity="0.4">${stars}</g>
+    ${dotRow(80, 640, 1240, 4, P.gold, 36)}`;
+  } },
+
+  'snowflake-pattern': { label: 'Snowflake', body: (P) => {
+    const flakes = [];
+    for (let i = 0; i < 12; i++) {
+      const x = 80 + (i % 4) * 180, y = 880 + Math.floor(i / 4) * 140;
+      const s = 20 + (i % 3) * 10;
+      let flake = `<g transform="translate(${x} ${y})" opacity="0.85">`;
+      for (let j = 0; j < 6; j++) {
+        const a = (j / 6) * Math.PI * 2;
+        flake += `<line x1="0" y1="0" x2="${Math.cos(a)*s}" y2="${Math.sin(a)*s}" stroke="${P.gold}" stroke-width="2"/>`;
+        flake += `<line x1="${Math.cos(a)*s*0.5}" y1="${Math.sin(a)*s*0.5}" x2="${Math.cos(a+0.4)*s*0.7}" y2="${Math.sin(a+0.4)*s*0.7}" stroke="${P.accent}" stroke-width="1.5"/>`;
+        flake += `<line x1="${Math.cos(a)*s*0.5}" y1="${Math.sin(a)*s*0.5}" x2="${Math.cos(a-0.4)*s*0.7}" y2="${Math.sin(a-0.4)*s*0.7}" stroke="${P.accent}" stroke-width="1.5"/>`;
+      }
+      flake += `<circle cx="0" cy="0" r="4" fill="${P.accent}"/></g>`;
+      flakes.push(flake);
+    }
+    return `${frame(P)}<g>${flakes.join('')}</g>
+    <g opacity="0.5">${[0,1,2,3,4,5,6,7,8,9].map(i => `<circle cx="${60+Math.random()*600}" cy="${100+Math.random()*200}" r="${2+Math.random()*3}" fill="${P.gold}" opacity="0.6"/>`).join('')}</g>
+    ${dotRow(80, 640, 1240, 4, P.accent, 36)}`;
+  } },
+
+  'holly-bells': { label: 'Holly & Bells', body: (P) => {
+    const bells = [0,1,2,3].map(i => {
+      const x = 200 + i * 110, y = 1050 + (i % 2) * 60;
+      return `<g transform="translate(${x} ${y})">
+        <path d="M0 0 Q-20 -30 -10 -50 Q0 -30 10 -50 Q20 -30 0 0 Z" fill="${P.accent2}" opacity="0.85"/>
+        <path d="M0 0 Q20 -20 30 -10 Q10 10 0 0 Z" fill="${P.accent2}" opacity="0.7" transform="rotate(60)"/>
+        <circle cx="-5" cy="-20" r="5" fill="${P.accent}"/><circle cx="5" cy="-25" r="4" fill="${P.accent}"/>
+        <ellipse cx="0" cy="10" rx="8" ry="12" fill="${P.gold}" opacity="0.9"/>
+        <line x1="0" y1="-2" x2="0" y2="10" stroke="${P.dark}" stroke-width="1" opacity="0.5"/>
+      </g>`;
+    }).join('');
+    const dots = [0,1,2,3,4,5].map(i => `<circle cx="${120+i*100}" cy="140" r="6" fill="${P.gold}" opacity="0.7"/>`).join('');
+    return `    <g opacity="0.9">${bells}</g>
+    ${frame(P, 22)}
+    <g opacity="0.45">${dots}</g>
+    ${dotRow(80, 640, 60, 5, P.accent, 30)}`;
+  } },
+
+  'ornament-garland': { label: 'Ornament Garland', body: (P) => {
+    const ornaments = [0,1,2,3,4,5,6,7].map(i => {
+      const x = 90 + i * 82, sag = Math.sin((i/7)*Math.PI) * 40;
+      const y = 920 + sag;
+      const colors = [P.accent, P.accent2, P.gold, P.accent, P.accent2, P.gold, P.accent, P.accent2];
+      return `<g transform="translate(${x} ${y})">
+        <line x1="0" y1="-30" x2="0" y2="0" stroke="${P.gold}" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="0" cy="0" r="18" fill="${colors[i]}" opacity="0.9"/>
+        <circle cx="-5" cy="-5" r="5" fill="white" opacity="0.3"/>
+        <rect x="-4" y="-22" width="8" height="6" rx="2" fill="${P.gold}"/>
+      </g>`;
+    }).join('');
+    return `    <g opacity="0.9">${ornaments}</g>
+    <path d="M90 890 Q200 940 360 920 Q520 900 630 920" fill="none" stroke="${P.gold}" stroke-width="2" opacity="0.6"/>
+    ${frame(P)}
+    <g opacity="0.4">${petalRing(360, 140, 12, 70, 10, P.gold, P.accent)}</g>
+    ${dotRow(80, 640, 1240, 4, P.gold, 36)}`;
+  } },
+
+  'candy-cane': { label: 'Candy Cane', body: (P) => {
+    const canes = [0,1,2,3].map(i => {
+      const x = 180 + i * 130;
+      return `<g transform="translate(${x} 1050) rotate(${-15 + i * 10})">
+        <path d="M0 0 L0 -160 Q0 -200 40 -200" fill="none" stroke="${P.accent}" stroke-width="16" stroke-linecap="round" opacity="0.85"/>
+        <path d="M0 0 L0 -160 Q0 -200 40 -200" fill="none" stroke="${P.light}" stroke-width="16" stroke-dasharray="12 12" stroke-linecap="round" opacity="0.7"/>
+      </g>`;
+    }).join('');
+    const dots = [0,1,2,3,4,5].map(i => `<circle cx="${100+i*110}" cy="140" r="8" fill="${i%2?P.accent:P.gold}" opacity="0.7"/>`).join('');
+    return `    <g opacity="0.9">${canes}</g>
+    ${frame(P, 20)}
+    <g opacity="0.5">${dots}</g>
+    ${dotRow(80, 640, 1240, 4, P.gold, 36)}`;
+  } },
+
+  'star-bethlehem': { label: 'Star of Bethlehem', body: (P) => {
+    const rays = [0,1,2,3,4,5,6,7].map(i => {
+      const a = (i/8)*Math.PI*2, r = 200 + (i%3)*40;
+      const x = 360+Math.cos(a)*r, y = 390+Math.sin(a)*r*0.6;
+      return `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${3+(i%3)*2}" fill="${P.gold}" opacity="0.6"/>`;
+    }).join('');
+    return `    <g opacity="0.95">
+    <path d="M360 200 L380 340 L520 360 L400 440 L430 580 L360 500 L290 580 L320 440 L200 360 L340 340 Z" fill="${P.gold}" opacity="0.9"/>
+    <path d="M360 240 L372 340 L472 356 L390 420 L412 530 L360 476 L308 530 L330 420 L248 356 L348 340 Z" fill="${P.accent}" opacity="0.7"/>
+    <circle cx="360" cy="390" r="20" fill="${P.light}" opacity="0.8"/>
+    </g>
+    ${rays}
+    ${frame(P)}
+    ${dotRow(80, 640, 1240, 4, P.accent, 36)}`;
+  } },
+
+  'poinsettia': { label: 'Poinsettia', body: (P) => {
+    const petals = [];
+    for (let ring = 0; ring < 3; ring++) {
+      const count = 8 + ring * 2;
+      const r = 60 + ring * 40;
+      for (let i = 0; i < count; i++) {
+        const a = (i / count) * Math.PI * 2 + ring * 0.2;
+        const x = 360 + Math.cos(a) * r;
+        const y = 1080 + Math.sin(a) * r * 0.6;
+        const colors = [P.accent, P.accent2, P.gold];
+        petals.push(`<ellipse cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" rx="${18-ring*3}" ry="${30-ring*5}" fill="${colors[ring]}" opacity="0.85" transform="rotate(${(a*180/Math.PI).toFixed(0)} ${x.toFixed(0)} ${y.toFixed(0)})"/>`);
+      }
+    }
+    return `${frame(P)}<g opacity="0.9">${petals.join('')}
+    <circle cx="360" cy="1080" r="16" fill="${P.gold}"/>
+    <circle cx="354" cy="1076" r="4" fill="${P.accent}"/><circle cx="366" cy="1076" r="4" fill="${P.accent}"/>
+    <circle cx="360" cy="1086" r="4" fill="${P.accent2}"/></g>
+    <g opacity="0.45">${[120, 600].map(x => `<path d="M${x} 140 Q${x+20} 100 ${x+40} 140 Q${x+20} 180 ${x} 140" fill="${P.accent2}" opacity="0.7"/>`).join('')}</g>
+    ${dotRow(80, 640, 1240, 4, P.gold, 36)}`;
+  } },
+
+  'santa-silhouette': { label: 'Santa Night', body: (P) => {
+    const stars = [0,1,2,3,4,5,6,7,8,9,10,11].map(i => `<circle cx="${60+i*55}" cy="${100+Math.sin(i*0.8)*30}" r="${1.5+Math.random()*2}" fill="${P.gold}" opacity="0.7"/>`).join('');
+    return `    <g opacity="0.9">
+    <path d="M100 1000 Q200 960 300 980 Q400 940 500 970 Q600 950 650 990 L650 1050 L100 1050 Z" fill="${P.dark}" opacity="0.3"/>
+    <circle cx="540" cy="200" r="60" fill="${P.gold}" opacity="0.15"/>
+    <circle cx="540" cy="200" r="40" fill="${P.gold}" opacity="0.1"/>
+    <g transform="translate(360 300) scale(1.2)">
+      <ellipse cx="0" cy="0" rx="30" ry="36" fill="${P.accent}" opacity="0.9"/>
+      <path d="M-30 -10 Q-40 -40 0 -50 Q40 -40 30 -10" fill="${P.accent}" opacity="0.9"/>
+      <circle cx="0" cy="-50" r="10" fill="white" opacity="0.9"/>
+      <rect x="-35" y="-15" width="70" height="10" rx="5" fill="white" opacity="0.8"/>
+    </g>
+    </g>
+    ${stars}
+    ${frame(P, 24)}
+    ${dotRow(80, 640, 1240, 4, P.accent, 36)}`;
+  } },
+
+  'gingerbread': { label: 'Gingerbread', body: (P) => {
+    const canes = [0,1,2,3,4,5].map(i => {
+      const x = 140 + i * 90;
+      return `<g transform="translate(${x} 160) scale(0.5)"><path d="M0 0 L0 -30 Q0 -50 20 -50" fill="none" stroke="${P.accent}" stroke-width="8" stroke-linecap="round" opacity="0.6"/><path d="M0 0 L0 -30 Q0 -50 20 -50" fill="none" stroke="${P.light}" stroke-width="8" stroke-dasharray="6 6" stroke-linecap="round" opacity="0.5"/></g>`;
+    }).join('');
+    return `    <g opacity="0.9">
+    <g transform="translate(360 1050)">
+      <ellipse cx="0" cy="0" rx="50" ry="60" fill="${P.accent}" opacity="0.85" rx="20"/>
+      <circle cx="-18" cy="-20" r="5" fill="${P.gold}"/><circle cx="18" cy="-20" r="5" fill="${P.gold}"/>
+      <circle cx="0" cy="-5" r="4" fill="${P.accent2}"/>
+      <circle cx="-12" cy="15" r="4" fill="${P.gold}"/><circle cx="12" cy="15" r="4" fill="${P.gold}"/>
+      <path d="M-15 30 Q0 40 15 30" fill="none" stroke="${P.gold}" stroke-width="2"/>
+      <rect x="-40" y="-50" width="16" height="40" rx="8" fill="${P.accent}" opacity="0.8" transform="rotate(-20 -40 -50)"/>
+      <rect x="24" y="-50" width="16" height="40" rx="8" fill="${P.accent}" opacity="0.8" transform="rotate(20 24 -50)"/>
+    </g>
+    </g>
+    ${canes}
+    ${frame(P)}
+    ${dotRow(80, 640, 1240, 4, P.gold, 36)}`;
+  } },
 };
 
-// ─────────────────────────── occasion mapping ───────────────────────────
+// ─────────────────────────── occasion mapping ──────────────────────────
 // design keys, palettes and name pools per occasion so cards look intentional
 const OCCASIONS = {
   wedding: { label: 'Weddings', designs: ['temple-arch', 'marble-pillar', 'mandala', 'silk-drape', 'paisley-corner', 'toran-garland', 'floral-wreath', 'kalash-auspicious', 'peacock-fan', 'hearts-romance', 'sunburst-horizon'], palettes: ['deep-maroon', 'marigold-royale', 'rani-pink', 'ivory-jade', 'rose-gold', 'emerald-ivory', 'peacock-teal', 'saffron-temple', 'terracotta-raj', 'cocoa-cream', 'royal-purple', 'navy-silver', 'champagne-blush', 'ruby-wine', 'dusty-lavender'],
@@ -527,8 +704,8 @@ const OCCASIONS = {
     names: ['Retirement Gala', 'Silver Jubilee Farewell', 'Thank You Sir', 'Chapter Two'], color: 'royal-blue' },
   farewell: { label: 'Farewell', designs: ['star-night', 'layered-waves', 'corporate-grid', 'balloon-party'], palettes: ['midnight-gold', 'sky-trust', 'carnival-pop', 'royal-blue'],
     names: ['Farewell Fete', 'Alvida Night', 'Bon Voyage', 'Last Bench Days'], color: 'peacock-blue' },
-  christmas: { label: 'Christmas', designs: ['star-night', 'layered-waves', 'mandala', 'corporate-grid', 'rangoli-border', 'floral-wreath', 'hearts-romance', 'silk-drape', 'sunburst-horizon', 'moorish-arch', 'temple-arch', 'paisley-corner'], palettes: ['forest-night', 'emerald-ivory', 'deep-maroon', 'sky-trust', 'ivory-jade', 'ruby-wine', 'navy-silver', 'midnight-gold', 'plum-noir', 'carnival-pop', 'royal-purple', 'dusty-lavender', 'champagne-blush'],
-    names: ['Merry Christmas', 'Noel Night', 'Silent Night Supper', 'Christmas Carols', 'Joy to the World', 'Star of Bethlehem', 'Holly Jolly Christmas', 'Santa\'s Workshop', 'Winter Wonderland', 'Xmas Gala'], color: 'emerald' },
+  christmas: { label: 'Christmas', designs: ['xmas-tree', 'snowflake-pattern', 'holly-bells', 'ornament-garland', 'candy-cane', 'star-bethlehem', 'poinsettia', 'santa-silhouette', 'gingerbread', 'star-night', 'layered-waves', 'mandala', 'floral-wreath', 'hearts-romance', 'silk-drape', 'sunburst-horizon', 'moorish-arch', 'temple-arch', 'paisley-corner', 'rangoli-border', 'corporate-grid'], palettes: ['xmas-classic', 'xmas-elegant', 'xmas-winter', 'xmas-burgundy', 'xmas-forest', 'xmas-royal', 'forest-night', 'emerald-ivory', 'deep-maroon', 'ruby-wine', 'navy-silver', 'midnight-gold', 'plum-noir', 'royal-purple', 'dusty-lavender', 'champagne-blush', 'ivory-jade', 'carnival-pop'],
+    names: ['Merry Christmas', 'Noel Night', 'Silent Night Supper', 'Christmas Carols', 'Joy to the World', 'Star of Bethlehem', 'Holly Jolly Christmas', 'Santa\'s Workshop', 'Winter Wonderland', 'Xmas Gala', 'Christmas Eve Dinner', 'Festive Feast', 'Holiday Celebration', 'Christmas Morning', 'Jingle Bell Bash', 'Nutcracker Night', 'Christmas Lights', 'Deck the Halls', 'O Christmas Tree', 'We Wish You'], color: 'emerald' },
   'new-year': { label: 'New Year', designs: ['star-night', 'diya-lights', 'corporate-grid', 'balloon-party', 'sunburst-horizon'], palettes: ['midnight-gold', 'plum-noir', 'royal-blue', 'carnival-pop'],
     names: ['New Year Eve', 'Naya Saal', 'Countdown Party', 'Toast to Tomorrow'], color: 'gold-leaf' },
   'makar-sankranti': { label: 'Sankranti', designs: ['sunburst-horizon', 'rangoli-border', 'kalash-auspicious', 'toran-garland', 'layered-waves', 'kolam-rangoli'], palettes: ['marigold-royale', 'saffron-temple', 'sunrise-coral', 'sky-trust', 'emerald-ivory', 'olive-bronze'],
@@ -651,7 +828,7 @@ if (OUT_DIR.endsWith(path.join('templates', 'art'))) {
 // Curated output: for every occasion we build the full design x palette x layout
 // cross-product, shuffle it deterministically and take the first N, so the
 // cards a user browses are spread across motifs, colours and compositions.
-const PER_OCCASION = 75;
+const PER_OCCASION = 100;
 
 const rows = [];
 let count = 0;

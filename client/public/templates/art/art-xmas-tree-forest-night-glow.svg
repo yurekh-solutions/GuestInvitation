@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+<defs>
+  <linearGradient id="bgxmastreeforestnightglow" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0" stop-color="#10231A"/><stop offset="1" stop-color="#050D09"/>
+  </linearGradient>
+  <radialGradient id="glowxmastreeforestnightglow" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#F4FBF3" stop-opacity="0.92"/><stop offset="0.62" stop-color="#F4FBF3" stop-opacity="0.5"/><stop offset="1" stop-color="#F4FBF3" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<rect width="720" height="1280" fill="url(#bgxmastreeforestnightglow)"/>
+    <g opacity="0.95"><path d="M360 240 L260 440 L460 440 Z" fill="#1F6B47" opacity="0.9"/><path d="M360 420 L280 620 L440 620 Z" fill="#1F6B47" opacity="0.9"/><path d="M360 600 L300 800 L420 800 Z" fill="#1F6B47" opacity="0.9"/><rect x="340" y="580" width="40" height="50" rx="4" fill="#D4AF37" opacity="0.8"/>
+    <circle cx="360" cy="240" r="14" fill="#D4AF37"/><path d="M360 210 L360 230" stroke="#D4AF37" stroke-width="3"/></g>
+    <circle cx="200" cy="460" r="8" fill="#D4AF37" opacity="0.85"/><circle cx="270" cy="580" r="8" fill="#3E9B6D" opacity="0.85"/><circle cx="340" cy="700" r="8" fill="#D4AF37" opacity="0.85"/><circle cx="410" cy="460" r="8" fill="#3E9B6D" opacity="0.85"/><circle cx="480" cy="580" r="8" fill="#D4AF37" opacity="0.85"/><circle cx="550" cy="700" r="8" fill="#3E9B6D" opacity="0.85"/>
+    <rect x="22" y="22" width="676" height="1236" fill="none" stroke="#D4AF37" stroke-width="2.5"/><rect x="30" y="30" width="660" height="1220" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.6"/>
+    <g opacity="0.4"><circle cx="640" cy="1000" r="3" fill="#D4AF37"/><circle cx="558" cy="1127" r="3" fill="#D4AF37"/><circle cx="360" cy="1180" r="3" fill="#D4AF37"/><circle cx="162" cy="1127" r="3" fill="#D4AF37"/><circle cx="80" cy="1000" r="3" fill="#D4AF37"/><circle cx="162" cy="873" r="3" fill="#D4AF37"/><circle cx="360" cy="820" r="3" fill="#D4AF37"/><circle cx="558" cy="873" r="3" fill="#D4AF37"/></g>
+    <circle cx="80" cy="1240" r="4" fill="#D4AF37"/><circle cx="116" cy="1240" r="4" fill="#D4AF37"/><circle cx="152" cy="1240" r="4" fill="#D4AF37"/><circle cx="188" cy="1240" r="4" fill="#D4AF37"/><circle cx="224" cy="1240" r="4" fill="#D4AF37"/><circle cx="260" cy="1240" r="4" fill="#D4AF37"/><circle cx="296" cy="1240" r="4" fill="#D4AF37"/><circle cx="332" cy="1240" r="4" fill="#D4AF37"/><circle cx="368" cy="1240" r="4" fill="#D4AF37"/><circle cx="404" cy="1240" r="4" fill="#D4AF37"/><circle cx="440" cy="1240" r="4" fill="#D4AF37"/><circle cx="476" cy="1240" r="4" fill="#D4AF37"/><circle cx="512" cy="1240" r="4" fill="#D4AF37"/><circle cx="548" cy="1240" r="4" fill="#D4AF37"/><circle cx="584" cy="1240" r="4" fill="#D4AF37"/><circle cx="620" cy="1240" r="4" fill="#D4AF37"/>
+
+      <ellipse cx="360" cy="450" rx="356" ry="330" fill="url(#glowxmastreeforestnightglow)"/>
+      <ellipse cx="360" cy="450" rx="300" ry="272" fill="none" stroke="#D4AF37" stroke-width="1.2" opacity="0.35"/>
+      <path d="M0 1130 L720 1058 L720 1280 L0 1280 Z" fill="#D4AF37" opacity="0.14"/>
+      <circle cx="90" cy="1218" r="4" fill="#D4AF37"/><circle cx="132" cy="1218" r="4" fill="#D4AF37"/><circle cx="174" cy="1218" r="4" fill="#D4AF37"/><circle cx="216" cy="1218" r="4" fill="#D4AF37"/><circle cx="258" cy="1218" r="4" fill="#D4AF37"/><circle cx="300" cy="1218" r="4" fill="#D4AF37"/><circle cx="342" cy="1218" r="4" fill="#D4AF37"/><circle cx="384" cy="1218" r="4" fill="#D4AF37"/><circle cx="426" cy="1218" r="4" fill="#D4AF37"/><circle cx="468" cy="1218" r="4" fill="#D4AF37"/><circle cx="510" cy="1218" r="4" fill="#D4AF37"/><circle cx="552" cy="1218" r="4" fill="#D4AF37"/><circle cx="594" cy="1218" r="4" fill="#D4AF37"/>
+</svg>
