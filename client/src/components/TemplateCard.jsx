@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { HiPlay, HiOutlineHeart, HiHeart } from 'react-icons/hi';
-import { motion } from 'framer-motion';
 
 // Accent color dots - shows available theme colors
 const COLOR_DOTS = ['#800020', '#c4787a', '#2a7a7a'];
@@ -10,13 +9,11 @@ const TemplateCard = memo(({ template, index = 0, favourite = false, onToggleFav
   const targetUrl = `/customize/${slug}`;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25, delay: Math.min(index * 0.01, 0.15) }}
-      className={`template-card block group relative rounded-2xl overflow-hidden ${
+    <div
+      className={`template-card block group relative rounded-2xl overflow-hidden card-fade-in ${
         favourite ? 'ring-2 ring-[#e0486b]' : ''
       }`}
+      style={{ animationDelay: `${Math.min(index * 8, 200)}ms` }}
     >
       <a href={targetUrl} className="block" style={{ textDecoration: 'none' }}>
         {/* Preview Image - the artwork already carries the design, so keep it clean */}
@@ -108,7 +105,7 @@ const TemplateCard = memo(({ template, index = 0, favourite = false, onToggleFav
           Picked
         </span>
       )}
-    </motion.div>
+    </div>
   );
 });
 TemplateCard.displayName = 'TemplateCard';

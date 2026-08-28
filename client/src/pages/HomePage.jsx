@@ -1,9 +1,10 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { HiVideoCamera, HiSparkles, HiSearch, HiX, HiOutlineHeart, HiHeart } from 'react-icons/hi';
 import CategoryFilter from '../components/CategoryFilter';
 import TemplateCard from '../components/TemplateCard';
+import Pagination from '../components/Pagination';
 import { TEMPLATES, CATEGORIES, getGroup, getGroupIds, LANGUAGES } from '../data/templates';
 import logoMark from '../assets/logo-mark.png';
 
@@ -41,9 +42,7 @@ const HomePage = () => {
   const [sort, setSort] = useState('featured');
   const [picks, setPicks] = useState(readPicks);
   const [showPicksOnly, setShowPicksOnly] = useState(false);
-  const [visible, setVisible] = useState(PAGE_SIZE);
-  const sentinelRef = useRef(null);
-  const isLoadingMore = useRef(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const category = searchParams.get('category');
@@ -81,32 +80,11 @@ const HomePage = () => {
     return list;
   }, [templates, activeCategory, showVideoOnly, language, showPicksOnly, picks, query, sort]);
 
-  // Any filter change should take the shelf back to the top page
-  useEffect(() => { setVisible(PAGE_SIZE); }, [activeCategory, showVideoOnly, language, query, sort, showPicksOnly]);
+  // Any filter change should take the shelf back to page 1
+  useEffect(() => { setPage(1); }, [activeCategory, showVideoOnly, language, query, sort, showPicksOnly]);
 
-  // Auto-load more cards as user scrolls (infinite scroll)
-  const loadMore = useCallback(() => {
-    setVisible((v) => Math.min(v + PAGE_SIZE, filteredTemplates.length));
-    isLoadingMore.current = false;
-  }, [filteredTemplates.length]);
-
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !isLoadingMore.current) {
-          isLoadingMore.current = true;
-          loadMore();
-        }
-      },
-      { rootMargin: '400px' }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [loadMore]);
-
-  const shown = filteredTemplates.slice(0, visible);
+  const totalPages = Math.max(1, Math.ceil(filteredTemplates.length / PAGE_SIZE));
+  const shown = filteredTemplates.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const hasFilters = activeCategory !== 'all' || showVideoOnly || language !== 'all' || query.trim() !== '' || showPicksOnly;
 
   const totalTemplates = templates.length;
@@ -338,7 +316,7 @@ const HomePage = () => {
             </h2>
             <span className="text-sm text-gray-500 whitespace-nowrap">
               {filteredTemplates.length} design{filteredTemplates.length === 1 ? '' : 's'}
-              {filteredTemplates.length > visible ? ` · showing ${shown.length}` : ''}
+              {totalPages > 1 ? ` · page ${page} of ${totalPages}` : ''}
             </span>
           </div>
 
@@ -354,27 +332,15 @@ const HomePage = () => {
             ))}
           </div>
 
-          {/* Infinite scroll sentinel — triggers auto-load when scrolled into view */}
-          {filteredTemplates.length > visible && (
-            <div ref={sentinelRef} className="mt-8 flex flex-col items-center gap-3">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 border-2 border-[#800020]/25 border-t-[#800020] rounded-full animate-spin" />
-                <span className="text-sm text-gray-500">Loading more designs...</span>
-              </div>
-              <span className="text-xs text-gray-400">
-                {visible} of {filteredTemplates.length} shown
-              </span>
-            </div>
-          )}
-
-          {/* All loaded confirmation */}
-          {filteredTemplates.length > 0 && visible >= filteredTemplates.length && (
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-400">
-                You&apos;ve seen all {filteredTemplates.length} designs in this selection
-              </p>
-            </div>
-          )}
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            totalItems={filteredTemplates.length}
+            onPageChange={(p) => {
+              setPage(p);
+              document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          />
 
           {filteredTemplates.length === 0 && (
             <div className="text-center py-20">

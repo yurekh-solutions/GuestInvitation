@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { HiArrowLeft, HiDownload, HiVideoCamera, HiShare, HiCheck, HiX, HiChevronLeft, HiChevronRight, HiVolumeUp, HiVolumeOff, HiHeart } from 'react-icons/hi';
 import FieldEditor from '../components/FieldEditor';
 import toast from 'react-hot-toast';
@@ -1246,7 +1245,8 @@ const CustomizePage = () => {
   }, [id]);
 
   // Use TEMPLATES from data/templates.js as the single source of truth — no backend needed
-  const fallbackTemplates = TEMPLATES.map(t => ({
+  // Memoised: with 1 800+ templates re-creating this array on every render is expensive.
+  const fallbackTemplates = useMemo(() => TEMPLATES.map(t => ({
     id: t._id,
     slug: t.slug,
     category: t.category,
@@ -1255,7 +1255,7 @@ const CustomizePage = () => {
     videoPrice: t.videoPrice,
     previewImage: t.previewImage,
     recommendedColor: t.recommendedColor,
-  }));
+  })), []);
 
   useEffect(() => {
     if (!id) {
@@ -1358,8 +1358,8 @@ const CustomizePage = () => {
   };
 
 
-  // Template navigation (prev / next)
-  const currentIndex = Math.max(0, fallbackTemplates.findIndex(t => t.slug === id || t.id === id));
+  // Template navigation (prev / next) — memoised so 1 800+ .findIndex is not repeated on every render.
+  const currentIndex = useMemo(() => Math.max(0, fallbackTemplates.findIndex(t => t.slug === id || t.id === id)), [fallbackTemplates, id]);
   const totalTemplates = fallbackTemplates.length;
   const goToTemplate = (idx) => {
     const next = fallbackTemplates[(idx + totalTemplates) % totalTemplates];

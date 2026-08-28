@@ -210,3 +210,14 @@
 .preview-glow {
   animation: soft-pulse 3s ease-in-out infinite;
 }
+
+/* Lightweight card entrance — replaces Framer Motion per-card animation.
+   With 1 800+ templates, running a JS animation on every card is too heavy.
+   CSS keyframes are batched by the browser and stay at 60 fps. */
+@keyframes card-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card-fade-in {
+  animation: card-rise 0.3s ease-out both;
+}
