@@ -216,13 +216,13 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Filters Section — solid bar, tidy rows, sticks under the navbar */}
-      <section className="relative z-30 bg-[#fffbf5] border-y border-[#f0e3cd] py-3 md:sticky md:top-16">
+      {/* Filters Section */}
+      <section className="relative z-30 bg-[#fffbf5] border-y border-[#f0e3cd] py-2">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           {/* Toolbar */}
           <div className="rounded-2xl bg-white border border-[#eadfc9] shadow-[0_12px_30px_-24px_rgba(128,0,32,0.85)] p-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="relative order-1 basis-full sm:basis-auto sm:flex-1 min-w-[200px]">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide scroll-snap-x whitespace-nowrap">
+              <div className="relative flex-shrink-0 w-[240px] sm:w-[300px]">
                 <HiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="search"
@@ -297,7 +297,7 @@ const HomePage = () => {
           </div>
 
           {/* Occasion family + occasion chips */}
-          <div className="mt-2.5">
+          <div className="mt-1.5">
             <CategoryFilter activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
           </div>
         </div>

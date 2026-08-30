@@ -1,11 +1,9 @@
-import { useMemo, useState } from 'react';
-import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
+import { useMemo } from 'react';
 import { CATEGORIES, CATEGORY_GROUPS, TEMPLATES } from '../data/templates';
 
 // With 650+ designs the occasion bar needs a level above it: pick a family of
 // occasions first, then the occasion itself. Counts come straight from the
 // catalogue so a chip never leads to an empty shelf.
-const COLLAPSED_COUNT = 14;
 
 const tabBase = 'flex-shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full text-[11px] sm:text-xs font-semibold border transition-all duration-200';
 const tabOn = 'bg-[#800020] text-white border-[#800020] shadow-[0_8px_18px_-12px_rgba(128,0,32,1)]';
@@ -19,7 +17,6 @@ const useCounts = () => useMemo(() => {
 
 const CategoryFilter = ({ activeCategory, onCategoryChange }) => {
   const counts = useCounts();
-  const [showAll, setShowAll] = useState(false);
 
   // Which family does the current selection belong to?
   const activeGroup = useMemo(() => (
@@ -49,13 +46,10 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }) => {
     });
   }, [activeGroup, counts]);
 
-  const visibleChips = showAll ? chips : chips.slice(0, COLLAPSED_COUNT);
-  const canExpand = chips.length > COLLAPSED_COUNT;
-
   return (
     <div className="w-full">
-      {/* Occasion family — one tidy row, scrollable on narrow screens */}
-      <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide -mx-3 px-3 sm:mx-0 sm:px-0">
+      {/* Occasion family — single horizontal scrollable row, no wrapping */}
+      <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide scroll-snap-x scroll-fade-right whitespace-nowrap -mx-3 px-3 sm:mx-0 sm:px-0">
         {CATEGORY_GROUPS.map((g) => {
           const total = g.id === 'popular'
             ? TEMPLATES.length
@@ -66,10 +60,7 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }) => {
             <button
               key={g.id}
               type="button"
-              onClick={() => {
-                onCategoryChange(g.id === 'popular' ? 'all' : `group:${g.id}`);
-                setShowAll(false);
-              }}
+              onClick={() => onCategoryChange(g.id === 'popular' ? 'all' : `group:${g.id}`)}
               aria-pressed={active}
               className={`${tabBase} ${active ? tabOn : tabOff}`}
             >
@@ -80,9 +71,9 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }) => {
         })}
       </div>
 
-      {/* Occasions — collapsed to one sliding row, expands to a bounded grid */}
-      <div className={`mt-2 gap-2 ${showAll ? 'flex flex-wrap max-h-52 overflow-y-auto pr-1' : 'flex overflow-x-auto scrollbar-hide -mx-3 px-3 sm:mx-0 sm:px-0'} pb-1`}>
-        {visibleChips.map((chip) => {
+      {/* Occasions — single horizontal scrollable row, no wrapping */}
+      <div className="mt-2 flex items-center gap-1.5 overflow-x-auto scrollbar-hide scroll-snap-x scroll-fade-right whitespace-nowrap -mx-3 px-3 sm:mx-0 sm:px-0 pb-1">
+        {chips.map((chip) => {
           const active = activeCategory === chip.value;
           return (
             <button
@@ -97,20 +88,6 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }) => {
             </button>
           );
         })}
-
-        {canExpand && (
-          <button
-            type="button"
-            onClick={() => setShowAll((s) => !s)}
-            className={`${tabBase} !px-3 bg-[#800020]/8 text-[#800020] border-[#800020]/20 hover:bg-[#800020]/15`}
-          >
-            {showAll ? (
-              <>Show less <HiChevronUp className="w-3.5 h-3.5" /></>
-            ) : (
-              <>All {chips.length - 1} occasions <HiChevronDown className="w-3.5 h-3.5" /></>
-            )}
-          </button>
-        )}
       </div>
     </div>
   );
