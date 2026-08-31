@@ -2468,12 +2468,14 @@ const CustomizePage = () => {
                   style={{ height: `${activeLayout.artPct}%` }}
                 />
 
-                {/* Text Overlay — sized by the chosen layout split (textPct % of card height, top-anchored) */}
+                {/* Text Overlay — sized by the chosen layout split, vertically nudged by the text-position slider.
+                    When textNudge is 0 the text auto-fits to the cleanest band of the artwork inside the text area. */}
                 <div
-                  className="absolute left-0 right-0 flex items-start justify-center text-center pointer-events-none px-[6%] pt-5"
+                  className="absolute left-0 right-0 flex items-start justify-center text-center pointer-events-none px-[6%]"
                   style={{
-                    top: '0%',
+                    top: `calc(${activeLayout.textPct}% * ${textNudge / 100})`,
                     height: `${activeLayout.textPct}%`,
+                    paddingTop: `${Math.max(12, 20 + textNudge * 0.4)}px`,
                     color: textColorValue,
                   }}
                 >
@@ -2574,13 +2576,27 @@ const CustomizePage = () => {
                 </button>
               </div>
 
-              {/* Text placement control */}
+              {/* Text placement control — works on every template */}
               <div className="mt-4 rounded-xl border border-gray-200 bg-white p-3.5 shadow-sm">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Text position</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Text position</p>
+                    {textNudge === 0 && (
+                      <span className="text-[9px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-1.5 py-0.5">
+                        Auto fit
+                      </span>
+                    )}
+                  </div>
                   <button
                     type="button"
-                    onClick={() => setTextNudge(0)}
+                    onClick={() => {
+                      setTextNudge(0);
+                      // Re-run the auto-band detection so the text snaps to the
+                      // current template's cleanest area immediately.
+                      analyzeTextBand(templateImage).then((band) => {
+                        if (band) setAutoBand(band);
+                      });
+                    }}
                     className="text-[11px] text-[#800020] hover:underline"
                   >
                     Auto fit
@@ -2596,7 +2612,14 @@ const CustomizePage = () => {
                   className="w-full accent-[#800020]"
                   aria-label="Move text up or down"
                 />
-                <p className="text-[10px] text-gray-400 mt-1.5 leading-snug">
+                <div className="flex items-center justify-between text-[10px] text-gray-400 mt-1.5 leading-snug">
+                  <span>↑ Upar</span>
+                  <span className="text-gray-500">
+                    {textNudge === 0 ? 'Auto-fit active' : textNudge > 0 ? `Neeche ${textNudge}` : `Upar ${Math.abs(textNudge)}`}
+                  </span>
+                  <span>Neeche ↓</span>
+                </div>
+                <p className="text-[10px] text-gray-400 mt-1 leading-snug">
                   Text artwork ke sabse clean hisse mein automatically set hota hai. Zaroorat ho to upar-neeche slide karein.
                 </p>
               </div>
