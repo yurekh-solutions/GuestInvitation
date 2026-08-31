@@ -1027,8 +1027,8 @@ const analyzeTextBand = (src) => new Promise((resolve) => {
         //  · a mid-tone ground — too dark for maroon and too light for ivory at
         //    the same time, so no single colour reads on both the light and the
         //    dark parts of the band
-        busy: devTotal / rows > 15 || edgeTotal / rows > 14 || inkTotal / rows > 0.06
-          || (meanLum > 92 && meanLum < 196),
+        busy: devTotal / rows > 10 || edgeTotal / rows > 10 || inkTotal / rows > 0.04
+          || (meanLum > 70 && meanLum < 210),
       });
     } catch {
       resolve(fallback);
@@ -1285,7 +1285,7 @@ const CustomizePage = () => {
   // type colour is decided *against the board* rather than against the art.
   // Until the user picks one, the artwork itself decides: photos, dense ornament
   // and any greeting baked into the image get a panel; clean art does not.
-  const activeBoardId = textBoardId || (autoBand.busy ? 'cream' : 'none');
+  const activeBoardId = textBoardId || (autoBand.busy ? 'cream' : 'frost');
   const board = TEXT_BOARDS.find((b) => b.id === activeBoardId) || TEXT_BOARDS[0];
   const boardStyle = VIDEO_BOARD_STYLES[board.id];
 
@@ -1331,7 +1331,7 @@ const CustomizePage = () => {
   // The halo has to oppose the type: light letters need a dark halo, and vice versa.
   // On a solid board the panel already does the work, so the glow is dialled right down.
   const textIsLight = hexLuminance(textColorValue) > groundLuminance;
-  const haloAlpha = boardStyle ? 0.28 : 0.9;
+  const haloAlpha = boardStyle ? 0.35 : 1.0;
   const textHalo = textIsLight
     ? `rgba(0,0,0,${Math.min(0.65, 0.72 * haloAlpha + 0.08)})`
     : `rgba(255,255,255,${Math.min(0.92, 0.98 * haloAlpha + 0.06)})`;
@@ -2480,7 +2480,7 @@ const CustomizePage = () => {
                           opacity: b.opacity,
                           letterSpacing: b.letterSpacing,
                           marginTop: b.gap ? `${b.gap * previewScale}px` : 0,
-                          textShadow: boardCss ? `0 1px 2px ${textHalo}` : `0 0 14px ${textHalo}, 0 1px 2px rgba(0,0,0,0.12)`,
+                          textShadow: boardCss ? `0 1px 2px ${textHalo}` : `0 0 18px ${textHalo}, 0 0 6px ${textHalo}, 0 2px 4px rgba(0,0,0,0.25)`,
                           wordBreak: 'break-word',
                         }}
                       >
@@ -2714,9 +2714,11 @@ const CustomizePage = () => {
                     );
                   })}
                 </div>
-                {textBoardId === null && autoBand.busy && (
+                {textBoardId === null && (
                   <p className="text-[10px] text-[#800020]/80 mt-1.5">
-                    Auto lagaya — is artwork par text safe reh sake. Neeche se badal sakte hain.
+                    {autoBand.busy
+                      ? 'Artwork busy hai — cream panel lagaya text safe rakhne ke liye. Neeche se badal sakte hain.'
+                      : 'Auto frost panel lagaya — har artwork par text readable rahe. Neeche se badal sakte hain.'}
                   </p>
                 )}
               </div>
