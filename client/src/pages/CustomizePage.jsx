@@ -881,10 +881,10 @@ const TEXT_STACK = [
   { key: 'closingLine', font: 'Great Vibes', size: 22, weight: 500, opacity: 0.98, gap: 4 },
 ];
 
-// Preview card is rendered ~420px wide; the video canvas is 720px wide.
+// Preview card is rendered ~420px wide; the video canvas is 1080px wide (Full HD portrait).
 const PREVIEW_CARD_WIDTH = 420;
-const VIDEO_WIDTH = 720;
-const VIDEO_HEIGHT = 1280;
+const VIDEO_WIDTH = 1080;
+const VIDEO_HEIGHT = 1920;
 const VIDEO_SCALE = VIDEO_WIDTH / PREVIEW_CARD_WIDTH;
 
 const clampBand = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -1183,16 +1183,6 @@ const CustomizePage = () => {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const musicCtxRef = useRef(null);
 
-  // Text vs artwork split — user can choose how much of the card is text vs design
-  // 'balanced' (default 30/70), 'text-dominant' (75% text, 25% art at top), 'artwork-dominant' (35% text, 65% art)
-  const LAYOUT_SPLITS = [
-    { id: 'balanced',         label: 'Balanced',          textPct: 30, artPct: 70, artPosition: 'top' },
-    { id: 'text-dominant',    label: 'Text 75% / Art 25%', textPct: 75, artPct: 25, artPosition: 'top' },
-    { id: 'artwork-dominant', label: 'Text 35% / Art 65%', textPct: 35, artPct: 65, artPosition: 'top' },
-  ];
-  const [layoutSplitId, setLayoutSplitId] = useState('balanced');
-  const activeLayout = LAYOUT_SPLITS.find((l) => l.id === layoutSplitId) || LAYOUT_SPLITS[0];
-
   // Cleanest band of the artwork for the text block, auto-detected per template
   const [autoBand, setAutoBand] = useState({ start: 6, end: 52, luminance: 235, busy: false });
   // Manual vertical nudge in percentage points, applied on top of the auto band
@@ -1398,7 +1388,7 @@ const CustomizePage = () => {
   };
 
   // Track the rendered preview width so the on-screen card and the exported
-  // video use the identical layout (video is 720px wide by definition).
+  // video use the identical layout (video is 1080px wide by definition).
   useEffect(() => {
     const el = previewRef.current;
     if (!el || typeof ResizeObserver === 'undefined') return undefined;
@@ -1481,12 +1471,7 @@ const CustomizePage = () => {
     const blocks = getTextBlocks();
     const heights = blocks.map((b) => b.lines * b.size * VIDEO_SCALE * 1.32 + b.gap * VIDEO_SCALE);
     const total = heights.reduce((sum, h) => sum + h, 0);
-    // Text lives in the top `textPct` of the frame, driven by the user's layout split choice.
-    const textTopFrac = 0.02;
-    const textBottomFrac = (activeLayout?.textPct || 30) / 100;
-    const bandTop = textTopFrac * VIDEO_HEIGHT;
-    const bandH = (textBottomFrac - textTopFrac) * VIDEO_HEIGHT;
-    const bandCenter = bandTop + bandH / 2;
+    const bandCenter = ((textBand.start + textBand.end) / 200) * VIDEO_HEIGHT;
     let y = bandCenter - total / 2;
     return blocks.map((b, i) => {
       const centerY = y + heights[i] / 2;
@@ -1839,7 +1824,7 @@ const CustomizePage = () => {
   // Generate a smooth animated video (canvas + MediaRecorder)
   const generateAnimatedVideo = (withWatermark, withMusic = true) => {
     return new Promise((resolve, reject) => {
-      const W = 720, H = 1280;
+      const W = 1080, H = 1920;
       const canvas = document.createElement('canvas');
       canvas.width = W; canvas.height = H;
       // Keep canvas in DOM (hidden) so captureStream produces frames reliably
@@ -1941,7 +1926,7 @@ const CustomizePage = () => {
         const mimeCandidates = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4'];
         const mime = mimeCandidates.find(m => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || '';
         try {
-          recorder = new MediaRecorder(combinedStream, mime ? { mimeType: mime, videoBitsPerSecond: 5_000_000 } : undefined);
+          recorder = new MediaRecorder(combinedStream, mime ? { mimeType: mime, videoBitsPerSecond: 8_000_000 } : undefined);
         } catch (e) {
           recorder = new MediaRecorder(combinedStream);
         }
@@ -2024,14 +2009,24 @@ const CustomizePage = () => {
         };
 
         const drawFrame = (elapsed) => {
-          // Background with subtle Ken Burns zoom + pan
+          // Background with subtle Ken Burns zoom + pan — preserves aspect ratio
           const zoomProgress = elapsed / DURATION;
           const zoom = 1.03 + 0.05 * Math.sin(zoomProgress * Math.PI);
           const panX = 6 * Math.sin(zoomProgress * Math.PI * 2);
           const panY = 4 * Math.cos(zoomProgress * Math.PI * 2);
-          const dw = W * zoom, dh = H * zoom;
+          // Cover-fit: scale image to fill canvas without distortion
+          const imgAspect = img.width / img.height;
+          const canvasAspect = W / H;
+          let drawW, drawH;
+          if (imgAspect > canvasAspect) {
+            drawH = H * zoom;
+            drawW = drawH * imgAspect;
+          } else {
+            drawW = W * zoom;
+            drawH = drawW / imgAspect;
+          }
           ctx.clearRect(0, 0, W, H);
-          ctx.drawImage(img, (W - dw) / 2 + panX, (H - dh) / 2 + panY, dw, dh);
+          ctx.drawImage(img, (W - drawW) / 2 + panX, (H - drawH) / 2 + panY, drawW, drawH);
 
           // Soft animated light rays from top
           const rayGrad = ctx.createLinearGradient(W / 2, -100, W / 2, H * 0.65);
@@ -2171,27 +2166,6 @@ const CustomizePage = () => {
               ctx.restore();
             });
 
-            // Gold rule draws itself under the occasion name
-            if (b.key === 'eventName' && t > 0.55) {
-              const gt = Math.min((t - 0.55) / 0.45, 1);
-              const half = Math.min(W * 0.28, fontSize * 4) * easeOut(gt);
-              const ry = y + (lines.length * lineH) / 2 + fontSize * 0.42;
-              ctx.save();
-              ctx.globalAlpha = gt * 0.85;
-              ctx.strokeStyle = textIsLight ? 'rgba(255,215,130,0.9)' : 'rgba(184,134,11,0.85)';
-              ctx.lineWidth = 1.6;
-              ctx.beginPath();
-              ctx.moveTo(W / 2 - half, ry);
-              ctx.lineTo(W / 2 + half, ry);
-              ctx.stroke();
-              ctx.fillStyle = ctx.strokeStyle;
-              [W / 2 - half, W / 2 + half].forEach((cx) => {
-                ctx.beginPath();
-                ctx.arc(cx, ry, 2.6, 0, Math.PI * 2);
-                ctx.fill();
-              });
-              ctx.restore();
-            }
             ctx.restore();
           });
           ctx.restore();
@@ -2209,11 +2183,11 @@ const CustomizePage = () => {
             ctx.fillRect(0, H - scrimH, W, scrimH);
 
             const mark = 'Made with GuestInvitation  ·  guestinvitation.com';
-            const markSize = Math.round(17 * (W / 720));
+            const markSize = Math.round(17 * (W / 1080));
             ctx.font = `600 ${markSize}px 'Inter', sans-serif`;
             const heartW = markSize * 1.05;
             const textW = ctx.measureText(mark).width;
-            const baseY = H - Math.round(18 * (W / 720));
+            const baseY = H - Math.round(18 * (W / 1080));
             let cursor = (W - (heartW + textW)) / 2;
 
             // little heart before the credit
@@ -2460,22 +2434,19 @@ const CustomizePage = () => {
                 className="relative w-full max-h-[55vh] sm:max-h-none mx-auto rounded-2xl overflow-hidden shadow-lg border border-gray-100"
                 style={{ aspectRatio: '9/16' }}
               >
-                {/* Artwork — sized by the chosen layout split (artPct % of card height, top-anchored) */}
+                {/* Background Image */}
                 <img
                   src={templateImage}
                   alt="Template"
-                  className="absolute top-0 left-0 w-full object-cover"
-                  style={{ height: `${activeLayout.artPct}%` }}
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
 
-                {/* Text Overlay — sized by the chosen layout split, vertically nudged by the text-position slider.
-                    When textNudge is 0 the text auto-fits to the cleanest band of the artwork inside the text area. */}
+                {/* Text Overlay — every line stacked inside the cleanest band of the artwork */}
                 <div
-                  className="absolute left-0 right-0 flex items-start justify-center text-center pointer-events-none px-[6%]"
+                  className="absolute left-0 right-0 flex items-center justify-center text-center pointer-events-none px-[6%]"
                   style={{
-                    top: `calc(${activeLayout.textPct}% * ${textNudge / 100})`,
-                    height: `${activeLayout.textPct}%`,
-                    paddingTop: `${Math.max(12, 20 + textNudge * 0.4)}px`,
+                    top: `${textBand.start}%`,
+                    height: `${textBand.end - textBand.start}%`,
                     color: textColorValue,
                   }}
                 >
@@ -2576,27 +2547,13 @@ const CustomizePage = () => {
                 </button>
               </div>
 
-              {/* Text placement control — works on every template */}
+              {/* Text placement control */}
               <div className="mt-4 rounded-xl border border-gray-200 bg-white p-3.5 shadow-sm">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-1.5">
-                    <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Text position</p>
-                    {textNudge === 0 && (
-                      <span className="text-[9px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-1.5 py-0.5">
-                        Auto fit
-                      </span>
-                    )}
-                  </div>
+                  <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Text position</p>
                   <button
                     type="button"
-                    onClick={() => {
-                      setTextNudge(0);
-                      // Re-run the auto-band detection so the text snaps to the
-                      // current template's cleanest area immediately.
-                      analyzeTextBand(templateImage).then((band) => {
-                        if (band) setAutoBand(band);
-                      });
-                    }}
+                    onClick={() => setTextNudge(0)}
                     className="text-[11px] text-[#800020] hover:underline"
                   >
                     Auto fit
@@ -2612,14 +2569,7 @@ const CustomizePage = () => {
                   className="w-full accent-[#800020]"
                   aria-label="Move text up or down"
                 />
-                <div className="flex items-center justify-between text-[10px] text-gray-400 mt-1.5 leading-snug">
-                  <span>↑ Upar</span>
-                  <span className="text-gray-500">
-                    {textNudge === 0 ? 'Auto-fit active' : textNudge > 0 ? `Neeche ${textNudge}` : `Upar ${Math.abs(textNudge)}`}
-                  </span>
-                  <span>Neeche ↓</span>
-                </div>
-                <p className="text-[10px] text-gray-400 mt-1 leading-snug">
+                <p className="text-[10px] text-gray-400 mt-1.5 leading-snug">
                   Text artwork ke sabse clean hisse mein automatically set hota hai. Zaroorat ho to upar-neeche slide karein.
                 </p>
               </div>
@@ -2697,30 +2647,6 @@ const CustomizePage = () => {
 
             {/* ===== Design Studio — typography, backdrop, colour, music ===== */}
             <div className="mt-6 mb-6 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm space-y-5">
-              {/* Layout split — user picks how much of the card is text vs artwork */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Layout split</p>
-                  <span className="text-[10px] text-gray-400">text vs artwork</span>
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {LAYOUT_SPLITS.map((l) => (
-                    <button
-                      key={l.id}
-                      type="button"
-                      onClick={() => setLayoutSplitId(l.id)}
-                      className={`px-2 py-2 rounded-lg border text-[11px] font-medium transition-all ${
-                        layoutSplitId === l.id
-                          ? 'border-[#800020] bg-[#800020] text-white shadow-sm'
-                          : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
-                      }`}
-                    >
-                      {l.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* One-click typography presets */}
               <div>
                 <div className="flex items-center justify-between mb-2">
