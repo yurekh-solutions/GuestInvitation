@@ -1183,6 +1183,16 @@ const CustomizePage = () => {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const musicCtxRef = useRef(null);
 
+  // Text vs artwork split — user can choose how much of the card is text vs design
+  // 'balanced' (default 30/70), 'text-dominant' (75% text, 25% art at top), 'artwork-dominant' (35% text, 65% art)
+  const LAYOUT_SPLITS = [
+    { id: 'balanced',         label: 'Balanced',          textPct: 30, artPct: 70, artPosition: 'top' },
+    { id: 'text-dominant',    label: 'Text 75% / Art 25%', textPct: 75, artPct: 25, artPosition: 'top' },
+    { id: 'artwork-dominant', label: 'Text 35% / Art 65%', textPct: 35, artPct: 65, artPosition: 'top' },
+  ];
+  const [layoutSplitId, setLayoutSplitId] = useState('balanced');
+  const activeLayout = LAYOUT_SPLITS.find((l) => l.id === layoutSplitId) || LAYOUT_SPLITS[0];
+
   // Cleanest band of the artwork for the text block, auto-detected per template
   const [autoBand, setAutoBand] = useState({ start: 6, end: 52, luminance: 235, busy: false });
   // Manual vertical nudge in percentage points, applied on top of the auto band
@@ -1471,9 +1481,9 @@ const CustomizePage = () => {
     const blocks = getTextBlocks();
     const heights = blocks.map((b) => b.lines * b.size * VIDEO_SCALE * 1.32 + b.gap * VIDEO_SCALE);
     const total = heights.reduce((sum, h) => sum + h, 0);
-    // Text lives in the top 32% of the frame, overlaid on the cream band of the artwork.
-    const textTopFrac = 0.04;
-    const textBottomFrac = 0.32;
+    // Text lives in the top `textPct` of the frame, driven by the user's layout split choice.
+    const textTopFrac = 0.02;
+    const textBottomFrac = (activeLayout?.textPct || 30) / 100;
     const bandTop = textTopFrac * VIDEO_HEIGHT;
     const bandH = (textBottomFrac - textTopFrac) * VIDEO_HEIGHT;
     const bandCenter = bandTop + bandH / 2;
@@ -2450,19 +2460,20 @@ const CustomizePage = () => {
                 className="relative w-full max-h-[55vh] sm:max-h-none mx-auto rounded-2xl overflow-hidden shadow-lg border border-gray-100"
                 style={{ aspectRatio: '9/16' }}
               >
-                {/* Full-bleed artwork — the template design fills the entire card, illustration is at the bottom */}
+                {/* Artwork — sized by the chosen layout split (artPct % of card height, top-anchored) */}
                 <img
                   src={templateImage}
                   alt="Template"
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute top-0 left-0 w-full object-cover"
+                  style={{ height: `${activeLayout.artPct}%` }}
                 />
 
-                {/* Text Overlay — positioned in the top 32% of the card, which is the clean cream band inside the template design */}
+                {/* Text Overlay — sized by the chosen layout split (textPct % of card height, top-anchored) */}
                 <div
                   className="absolute left-0 right-0 flex items-start justify-center text-center pointer-events-none px-[6%] pt-5"
                   style={{
                     top: '0%',
-                    height: '34%',
+                    height: `${activeLayout.textPct}%`,
                     color: textColorValue,
                   }}
                 >
@@ -2663,6 +2674,30 @@ const CustomizePage = () => {
 
             {/* ===== Design Studio — typography, backdrop, colour, music ===== */}
             <div className="mt-6 mb-6 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm space-y-5">
+              {/* Layout split — user picks how much of the card is text vs artwork */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Layout split</p>
+                  <span className="text-[10px] text-gray-400">text vs artwork</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {LAYOUT_SPLITS.map((l) => (
+                    <button
+                      key={l.id}
+                      type="button"
+                      onClick={() => setLayoutSplitId(l.id)}
+                      className={`px-2 py-2 rounded-lg border text-[11px] font-medium transition-all ${
+                        layoutSplitId === l.id
+                          ? 'border-[#800020] bg-[#800020] text-white shadow-sm'
+                          : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
+                      }`}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* One-click typography presets */}
               <div>
                 <div className="flex items-center justify-between mb-2">
