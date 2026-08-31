@@ -1285,7 +1285,7 @@ const CustomizePage = () => {
   // type colour is decided *against the board* rather than against the art.
   // Until the user picks one, the artwork itself decides: photos, dense ornament
   // and any greeting baked into the image get a panel; clean art does not.
-  const activeBoardId = textBoardId || (autoBand.busy ? 'cream' : 'frost');
+  const activeBoardId = textBoardId || 'none';
   const board = TEXT_BOARDS.find((b) => b.id === activeBoardId) || TEXT_BOARDS[0];
   const boardStyle = VIDEO_BOARD_STYLES[board.id];
 
@@ -1333,8 +1333,8 @@ const CustomizePage = () => {
   const textIsLight = hexLuminance(textColorValue) > groundLuminance;
   const haloAlpha = boardStyle ? 0.35 : 1.0;
   const textHalo = textIsLight
-    ? `rgba(0,0,0,${Math.min(0.65, 0.72 * haloAlpha + 0.08)})`
-    : `rgba(255,255,255,${Math.min(0.92, 0.98 * haloAlpha + 0.06)})`;
+    ? `rgba(0,0,0,${Math.min(0.85, 0.92 * haloAlpha + 0.12)})`
+    : `rgba(255,255,255,${Math.min(1.0, 1.0 * haloAlpha + 0.1)})`;
   const textOutline = textIsLight
     ? `rgba(0,0,0,${0.5 * haloAlpha})`
     : `rgba(255,255,255,${0.85 * haloAlpha})`;
@@ -1465,18 +1465,20 @@ const CustomizePage = () => {
     return acc;
   }, []);
 
-  // Video text blocks: stacked top-down inside the detected band so that
-  // spacing matches the preview and lines can never overlap each other.
+  // Video text blocks: stacked in the bottom clean area (below 62% artwork)
   const buildVideoTextBlocks = () => {
     const blocks = getTextBlocks();
-    const heights = blocks.map((b) => b.lines * b.size * VIDEO_SCALE * 1.32 + b.gap * VIDEO_SCALE);
+    const heights = blocks.map((b) => b.lines * b.size * VIDEO_SCALE * 1.35 + b.gap * VIDEO_SCALE * 0.85);
     const total = heights.reduce((sum, h) => sum + h, 0);
-    const bandCenter = ((textBand.start + textBand.end) / 200) * VIDEO_HEIGHT;
-    let y = bandCenter - total / 2;
+    // Center text in the bottom 38% of the canvas
+    const textAreaTop = VIDEO_HEIGHT * 0.64;
+    const textAreaBottom = VIDEO_HEIGHT * 0.96;
+    const textAreaCenter = (textAreaTop + textAreaBottom) / 2;
+    let y = textAreaCenter - total / 2;
     return blocks.map((b, i) => {
       const centerY = y + heights[i] / 2;
       y += heights[i];
-      return { ...b, yPx: centerY, fontPx: b.size * VIDEO_SCALE };
+      return { ...b, yPx: centerY, fontPx: b.size * VIDEO_SCALE * 0.92 };
     });
   };
 
@@ -1972,31 +1974,7 @@ const CustomizePage = () => {
           ctx.closePath();
         };
 
-        // Pre-compute the backdrop panel geometry so the type always sits on it
-        let boardRect = null;
-        if (boardStyle && blocks.length) {
-          let top = Infinity;
-          let bottom = -Infinity;
-          let maxW = 0;
-          blocks.forEach((b) => {
-            ctx.font = `${b.weight} ${Math.round(b.fontPx)}px '${b.font}', 'Tiro Devanagari Hindi', serif`;
-            String(b.text).split('\n').forEach((line) => {
-              maxW = Math.max(maxW, ctx.measureText(line).width);
-            });
-            const h = b.lines * b.fontPx * 1.32;
-            top = Math.min(top, b.yPx - h / 2);
-            bottom = Math.max(bottom, b.yPx + h / 2);
-          });
-          const padX = Math.max(26, Math.min(54, W * 0.1));
-          const padY = 30;
-          const halfW = Math.min(maxW, W * 0.84) / 2 + padX;
-          boardRect = {
-            x: Math.max(14, W / 2 - halfW),
-            y: Math.max(14, top - padY),
-            w: Math.min(W - 28, halfW * 2),
-            h: Math.min(H - 28, (bottom - top) + padY * 2),
-          };
-        }
+        // Text is positioned in the bottom clean area — no panel needed
 
         // Draw a soft vignette to keep text readable over busy areas
         const drawVignette = () => {
@@ -2009,14 +1987,30 @@ const CustomizePage = () => {
         };
 
         const drawFrame = (elapsed) => {
-          // Background with subtle Ken Burns zoom + pan
+          // Background with subtle Ken Burns zoom + pan — artwork only in top 62%
           const zoomProgress = elapsed / DURATION;
           const zoom = 1.03 + 0.05 * Math.sin(zoomProgress * Math.PI);
           const panX = 6 * Math.sin(zoomProgress * Math.PI * 2);
           const panY = 4 * Math.cos(zoomProgress * Math.PI * 2);
-          const dw = W * zoom, dh = H * zoom;
+          const artH = H * 0.62;
+          const dw = W * zoom, dh = artH * zoom;
           ctx.clearRect(0, 0, W, H);
-          ctx.drawImage(img, (W - dw) / 2 + panX, (H - dh) / 2 + panY, dw, dh);
+
+          // Draw artwork in top portion only
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(0, 0, W, artH + 10);
+          ctx.clip();
+          ctx.drawImage(img, (W - dw) / 2 + panX, (artH - dh) / 2 + panY, dw, dh);
+          ctx.restore();
+
+          // Clean warm background for text area (bottom 38%)
+          const textBgGrad = ctx.createLinearGradient(0, artH * 0.85, 0, H);
+          textBgGrad.addColorStop(0, 'rgba(253,248,240,0)');
+          textBgGrad.addColorStop(0.15, 'rgba(253,248,240,0.92)');
+          textBgGrad.addColorStop(1, 'rgba(253,248,240,0.98)');
+          ctx.fillStyle = textBgGrad;
+          ctx.fillRect(0, 0, W, H);
 
           // Soft animated light rays from top
           const rayGrad = ctx.createLinearGradient(W / 2, -100, W / 2, H * 0.65);
@@ -2093,34 +2087,12 @@ const CustomizePage = () => {
           ctx.scale(breathe, breathe);
           ctx.translate(-W / 2, -H / 2);
 
-          // Backdrop panel wipes in before the type lands
-          if (boardRect) {
-            const bt = easeOut(Math.min(Math.max(elapsed / 650, 0), 1));
-            ctx.save();
-            ctx.globalAlpha = bt;
-            const bh = boardRect.h * bt;
-            const by = boardRect.y + (boardRect.h - bh) / 2;
-            roundRectPath(boardRect.x, by, boardRect.w, bh, 24);
-            ctx.fillStyle = boardStyle.fill;
-            ctx.fill();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = boardStyle.stroke;
-            ctx.stroke();
-            // Inner hairline frame for a printed-card finish
-            if (bt > 0.55) {
-              ctx.globalAlpha = (bt - 0.55) / 0.45 * 0.75;
-              roundRectPath(boardRect.x + 8, by + 8, Math.max(0, boardRect.w - 16), Math.max(0, bh - 16), 16);
-              ctx.lineWidth = 1;
-              ctx.strokeStyle = boardStyle.stroke;
-              ctx.stroke();
-            }
-            ctx.restore();
-          }
+          // Backdrop panel removed — text sits on clean gradient background
 
-          // Text blocks animate in sequentially with scale + fade + glow
+          // Text blocks animate in sequentially with scale + fade
           const perBlock = (DURATION * 0.5) / Math.max(blocks.length, 1);
           blocks.forEach((b, i) => {
-            const start = (boardRect ? 520 : 300) + i * perBlock * 0.5;
+            const start = 300 + i * perBlock * 0.5;
             const t = Math.min(Math.max((elapsed - start) / 750, 0), 1);
             if (t <= 0) return;
             const alpha = easeOut(t) * b.opacity;
@@ -2135,15 +2107,15 @@ const CustomizePage = () => {
             const fontSize = Math.round(b.fontPx);
             ctx.font = `${b.weight} ${fontSize}px '${b.font}', 'Tiro Devanagari Hindi', serif`;
             const lines = String(b.text).split('\n');
-            const lineH = fontSize * 1.32;
+            const lineH = fontSize * 1.35;
             const startY = y - ((lines.length - 1) * lineH) / 2;
 
-            // Halo only does real work when there is no panel behind the type
+            // Strong shadow for readability
             ctx.shadowColor = textHalo;
-            ctx.shadowBlur = boardRect ? 6 : 16;
+            ctx.shadowBlur = 12;
             ctx.shadowOffsetX = 0;
             ctx.shadowOffsetY = 0;
-            ctx.lineWidth = boardRect ? 0 : Math.max(2.5, fontSize / 10);
+            ctx.lineWidth = Math.max(2, fontSize / 12);
             ctx.strokeStyle = textOutline;
 
             lines.forEach((line, li) => {
@@ -2151,7 +2123,7 @@ const CustomizePage = () => {
               ctx.save();
               ctx.translate(W / 2, ly);
               ctx.scale(scale, scale);
-              if (!boardRect) ctx.strokeText(line, 0, 0, W * 0.86);
+              ctx.strokeText(line, 0, 0, W * 0.86);
               ctx.fillText(line, 0, 0, W * 0.86);
               ctx.restore();
             });
@@ -2438,49 +2410,52 @@ const CustomizePage = () => {
           {/* Left: Preview Card (sticky) */}
           <div className="lg:w-[380px] xl:w-[420px] flex-shrink-0 mx-auto lg:mx-0">
             <div className="lg:sticky lg:top-24">
-              {/* Preview */}
+              {/* Preview — artwork top, text bottom, invitemitra-style layout */}
               <div
                 id="im-editor-preview"
                 ref={previewRef}
                 className="relative w-full max-h-[55vh] sm:max-h-none mx-auto rounded-2xl overflow-hidden shadow-lg border border-gray-100"
                 style={{ aspectRatio: '9/16' }}
               >
-                {/* Background Image */}
+                {/* Artwork — top 62% of card, object-position centered on upper portion */}
                 <img
                   src={templateImage}
                   alt="Template"
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute top-0 left-0 w-full object-cover"
+                  style={{ height: '62%', objectPosition: 'center 30%' }}
                 />
 
-                {/* Text Overlay — every line stacked inside the cleanest band of the artwork */}
+                {/* Gradient blend between artwork and text area */}
                 <div
-                  className="absolute left-0 right-0 flex items-center justify-center text-center pointer-events-none px-[6%]"
+                  className="absolute left-0 right-0 pointer-events-none"
                   style={{
-                    top: `${textBand.start}%`,
-                    height: `${textBand.end - textBand.start}%`,
+                    top: '52%',
+                    height: '18%',
+                    background: 'linear-gradient(to bottom, transparent 0%, rgba(253,248,240,0.3) 40%, rgba(253,248,240,0.85) 100%)',
+                  }}
+                />
+
+                {/* Text area — bottom 38% on clean warm background */}
+                <div
+                  className="absolute left-0 right-0 bottom-0 flex items-start justify-center text-center px-[8%] pt-6"
+                  style={{
+                    height: '42%',
+                    background: 'linear-gradient(to bottom, rgba(253,248,240,0.92) 0%, rgba(253,248,240,0.98) 100%)',
                     color: textColorValue,
                   }}
                 >
-                  <div
-                    className="flex flex-col items-center max-w-full"
-                    style={{
-                      ...(boardCss || {}),
-                      borderRadius: boardCss ? '18px' : 0,
-                      padding: boardCss ? `${Math.round(16 * previewScale)}px ${Math.round(18 * previewScale)}px` : 0,
-                    }}
-                  >
+                  <div className="flex flex-col items-center max-w-full w-full">
                     {getTextBlocks().map((b) => (
                       <p
                         key={b.key}
                         style={{
                           fontFamily: `'${b.font}', 'Tiro Devanagari Hindi', serif`,
-                          fontSize: `${b.size * previewScale}px`,
+                          fontSize: `${b.size * previewScale * 0.92}px`,
                           fontWeight: b.weight,
-                          lineHeight: 1.32,
+                          lineHeight: 1.4,
                           opacity: b.opacity,
                           letterSpacing: b.letterSpacing,
-                          marginTop: b.gap ? `${b.gap * previewScale}px` : 0,
-                          textShadow: boardCss ? `0 1px 2px ${textHalo}` : `0 0 18px ${textHalo}, 0 0 6px ${textHalo}, 0 2px 4px rgba(0,0,0,0.25)`,
+                          marginTop: b.gap ? `${b.gap * previewScale * 0.85}px` : 0,
                           wordBreak: 'break-word',
                         }}
                       >
@@ -2490,37 +2465,30 @@ const CustomizePage = () => {
                   </div>
                 </div>
 
-                {/* Watermark — bottom scrim + centred white credit, same read as the reference card */}
+                {/* Watermark — subtle credit at bottom of text area */}
                 {showWatermark && (
-                  <>
-                    <div
-                      className="absolute inset-x-0 bottom-0 pointer-events-none"
-                      style={{ height: '8%', background: 'linear-gradient(to top, rgba(24,6,12,0.50) 0%, rgba(24,6,12,0.25) 50%, rgba(24,6,12,0) 100%)' }}
+                  <div
+                    className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-1.5 pointer-events-none"
+                    style={{ paddingBottom: `${Math.round(6 * previewScale)}px`, paddingInline: `${Math.round(14 * previewScale)}px` }}
+                  >
+                    <HiHeart
+                      className="w-3 h-3 flex-shrink-0"
+                      style={{ color: '#800020', opacity: 0.5 }}
                     />
-                    <div
-                      className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-1.5 pointer-events-none"
-                      style={{ paddingBottom: `${Math.round(5 * previewScale)}px`, paddingInline: `${Math.round(14 * previewScale)}px` }}
+                    <span
+                      className="font-semibold tracking-wide text-center"
+                      style={{
+                        fontSize: `${Math.max(8, Math.round(10 * previewScale))}px`,
+                        color: '#800020',
+                        opacity: 0.45,
+                        lineHeight: 1.3,
+                      }}
                     >
-                      <HiHeart
-                        className="w-3 h-3 flex-shrink-0"
-                        style={{ color: '#FF6B7A', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.6))' }}
-                      />
-                      <span
-                        className="text-white font-semibold tracking-wide text-center"
-                        style={{
-                          fontSize: `${Math.max(8.5, Math.round(11 * previewScale))}px`,
-                          textShadow: '0 1px 3px rgba(0,0,0,0.85), 0 0 10px rgba(0,0,0,0.45)',
-                          // Wraps instead of truncating, so the credit can never
-                          // be cut off on a narrow card.
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        Made with GuestInvitation
-                        <span className="opacity-55 mx-1">·</span>
-                        <span className="font-medium opacity-90">guestinvitation.com</span>
-                      </span>
-                    </div>
-                  </>
+                      Made with GuestInvitation
+                      <span className="opacity-55 mx-1">·</span>
+                      <span className="font-medium">guestinvitation.com</span>
+                    </span>
+                  </div>
                 )}
 
                 {/* Falling confetti / petals animation overlay (video feel) */}
@@ -2716,9 +2684,7 @@ const CustomizePage = () => {
                 </div>
                 {textBoardId === null && (
                   <p className="text-[10px] text-[#800020]/80 mt-1.5">
-                    {autoBand.busy
-                      ? 'Artwork busy hai — cream panel lagaya text safe rakhne ke liye. Neeche se badal sakte hain.'
-                      : 'Auto frost panel lagaya — har artwork par text readable rahe. Neeche se badal sakte hain.'}
+                    Artwork upar, text neeche — invitemitra style layout. Neeche se background badal sakte hain.
                   </p>
                 )}
               </div>
