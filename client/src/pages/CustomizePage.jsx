@@ -1471,10 +1471,9 @@ const CustomizePage = () => {
     const blocks = getTextBlocks();
     const heights = blocks.map((b) => b.lines * b.size * VIDEO_SCALE * 1.32 + b.gap * VIDEO_SCALE);
     const total = heights.reduce((sum, h) => sum + h, 0);
-    // Text lives in the bottom 45% of the frame on a clean cream background.
-    // Top padding starts at 60% so the blocks sit nicely in the lower band.
-    const textTopFrac = 0.60;
-    const textBottomFrac = 0.96;
+    // Text lives in the top 32% of the frame, overlaid on the cream band of the artwork.
+    const textTopFrac = 0.04;
+    const textBottomFrac = 0.32;
     const bandTop = textTopFrac * VIDEO_HEIGHT;
     const bandH = (textBottomFrac - textTopFrac) * VIDEO_HEIGHT;
     const bandCenter = bandTop + bandH / 2;
@@ -2015,54 +2014,27 @@ const CustomizePage = () => {
         };
 
         const drawFrame = (elapsed) => {
-          // Artwork in the top 55% of the frame, with a subtle Ken Burns zoom + pan
+          // Background with subtle Ken Burns zoom + pan
           const zoomProgress = elapsed / DURATION;
           const zoom = 1.03 + 0.05 * Math.sin(zoomProgress * Math.PI);
           const panX = 6 * Math.sin(zoomProgress * Math.PI * 2);
           const panY = 4 * Math.cos(zoomProgress * Math.PI * 2);
-          const dw = W * zoom, dh = (H * 0.55) * zoom;
+          const dw = W * zoom, dh = H * zoom;
           ctx.clearRect(0, 0, W, H);
-
-          // Clean cream base for the bottom 45% text area
-          const baseGrad = ctx.createLinearGradient(0, 0, 0, H);
-          baseGrad.addColorStop(0, '#fdf8f0');
-          baseGrad.addColorStop(1, '#faf3e8');
-          ctx.fillStyle = baseGrad;
-          ctx.fillRect(0, 0, W, H);
-
-          // Clip the artwork to the top 55% so it never bleeds into the text area
-          ctx.save();
-          ctx.beginPath();
-          ctx.rect(0, 0, W, H * 0.55);
-          ctx.clip();
-          ctx.drawImage(img, (W - dw) / 2 + panX, ((H * 0.55) - dh) / 2 + panY, dw, dh);
-          ctx.restore();
-
-          // Soft blend between artwork and text area (45% to 60%)
-          const blendGrad = ctx.createLinearGradient(0, H * 0.45, 0, H * 0.60);
-          blendGrad.addColorStop(0, 'rgba(253,248,240,0)');
-          blendGrad.addColorStop(0.5, 'rgba(253,248,240,0.35)');
-          blendGrad.addColorStop(1, 'rgba(253,248,240,0.92)');
-          ctx.fillStyle = blendGrad;
-          ctx.fillRect(0, H * 0.45, W, H * 0.15);
+          ctx.drawImage(img, (W - dw) / 2 + panX, (H - dh) / 2 + panY, dw, dh);
 
           // Soft animated light rays from top
-          const rayGrad = ctx.createLinearGradient(W / 2, -100, W / 2, H * 0.50);
+          const rayGrad = ctx.createLinearGradient(W / 2, -100, W / 2, H * 0.65);
           rayGrad.addColorStop(0, `rgba(255, 248, 220, ${0.12 + 0.08 * Math.sin(elapsed * 0.002)})`);
           rayGrad.addColorStop(1, 'rgba(255, 248, 220, 0)');
           ctx.fillStyle = rayGrad;
-          ctx.save();
-          ctx.beginPath();
-          ctx.rect(0, 0, W, H * 0.55);
-          ctx.clip();
           ctx.beginPath();
           ctx.moveTo(W * 0.2, -50);
           ctx.lineTo(W * 0.8, -50);
-          ctx.lineTo(W * 0.55, H * 0.55);
-          ctx.lineTo(W * 0.45, H * 0.55);
+          ctx.lineTo(W * 0.55, H * 0.7);
+          ctx.lineTo(W * 0.45, H * 0.7);
           ctx.closePath();
           ctx.fill();
-          ctx.restore();
 
           drawVignette();
 
@@ -2476,32 +2448,21 @@ const CustomizePage = () => {
                 id="im-editor-preview"
                 ref={previewRef}
                 className="relative w-full max-h-[55vh] sm:max-h-none mx-auto rounded-2xl overflow-hidden shadow-lg border border-gray-100"
-                style={{ aspectRatio: '9/16', background: 'linear-gradient(to bottom, #fdf8f0 0%, #faf3e8 100%)' }}
+                style={{ aspectRatio: '9/16' }}
               >
-                {/* Artwork — top 55% of the card, design area */}
+                {/* Full-bleed artwork — the template design fills the entire card, illustration is at the bottom */}
                 <img
                   src={templateImage}
                   alt="Template"
-                  className="absolute top-0 left-0 w-full object-cover"
-                  style={{ height: '55%', objectPosition: 'center 30%' }}
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
 
-                {/* Soft blend between artwork and text area */}
+                {/* Text Overlay — positioned in the top 32% of the card, which is the clean cream band inside the template design */}
                 <div
-                  className="absolute left-0 right-0 pointer-events-none"
+                  className="absolute left-0 right-0 flex items-start justify-center text-center pointer-events-none px-[6%] pt-5"
                   style={{
-                    top: '45%',
-                    height: '15%',
-                    background: 'linear-gradient(to bottom, transparent 0%, rgba(253,248,240,0.35) 35%, rgba(253,248,240,0.92) 100%)',
-                  }}
-                />
-
-                {/* Text area — bottom 45% on clean warm cream background, no overlap with artwork */}
-                <div
-                  className="absolute left-0 right-0 bottom-0 flex items-start justify-center text-center px-[8%] pt-6"
-                  style={{
-                    height: '48%',
-                    background: 'linear-gradient(to bottom, rgba(253,248,240,0.96) 0%, #faf3e8 100%)',
+                    top: '0%',
+                    height: '34%',
                     color: textColorValue,
                   }}
                 >
