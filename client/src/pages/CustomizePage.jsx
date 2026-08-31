@@ -8,6 +8,7 @@ import jsPDF from 'jspdf';
 import { TEMPLATES } from '../data/templates';
 
 // Festival-specific field configurations
+// Triggering Vercel redeploy — latest ganpati template + video fixes
 const FESTIVAL_FIELDS = {
   ganpati: {
     title: 'Ganesh Chaturthi',
